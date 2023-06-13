@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Flags {
-    final String JOKES_API_URL = "https://v2.jokeapi.dev/joke/Programming,Miscellaneous,Dark?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&amount=2";
+/*public class Flags {
+   final String JOKES_API_URL = "https://v2.jokeapi.dev/joke/Programming,Miscellaneous,Dark?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&amount=2";
     String type;
     private boolean nsfw;
     private boolean religious;
@@ -47,4 +47,4 @@ public class Flags {
      //   System.out.println(.size());
         return jokesAPIList.stream().map(jokesAPI -> jokesAPI.getFullJoke()).collect(Collectors.toList());
     }
-}
+}*/
