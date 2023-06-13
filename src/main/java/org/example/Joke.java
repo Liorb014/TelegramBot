@@ -1,17 +1,16 @@
 package org.example;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 
-import java.util.List;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JokesAPI {
-  //  private boolean error;
+public class Joke {
+    //    public static final String Path= "https://v2.jokeapi.dev/joke/Any";
+    private boolean error;
     private String category;
     private String type;
     private String joke;
@@ -20,14 +19,6 @@ public class JokesAPI {
     private long id;
     private boolean safe;
     private String lang;
-
-/*    public boolean isError() {
-        return error;
-    }*/
-
-/*    public void setError(boolean error) {
-        this.error = error;
-    }*/
 
     public String getCategory() {
         return category;
@@ -39,6 +30,10 @@ public class JokesAPI {
 
     public String getType() {
         return type;
+    }
+
+    public boolean isError() {
+        return error;
     }
 
     public void setType(String type) {
@@ -61,13 +56,16 @@ public class JokesAPI {
         this.delivery = delivery;
     }
 
-
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void setError(boolean error) {
+        this.error = error;
     }
 
     public boolean isSafe() {
@@ -95,15 +93,15 @@ public class JokesAPI {
     }
 
     public String getFullJoke() {
-        if (type.equals("twopart")){
-            return this.setup +"\n\n" + this.delivery;
-        }else return joke;
+        if (type.equals("twopart")) {
+            return this.setup + "\n\n" + this.delivery;
+        } else return joke;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("JokesApi{");
-     //   sb.append("error=").append(error);
+        //   sb.append("error=").append(error);
         sb.append(", category='").append(category).append('\'');
         sb.append(", type='").append(type).append('\'');
         sb.append(", joke='").append(joke).append('\'');
@@ -115,4 +113,21 @@ public class JokesAPI {
         sb.append('}');
         return sb.toString();
     }
+
+    public static String getJokee() {
+        GetRequest getRequest = Unirest.get("https://v2.jokeapi.dev/joke/Any");
+        HttpResponse<String> response;
+        try {
+            response = getRequest.asString();
+        } catch (UnirestException e) {
+            throw new RuntimeException(e);
+        }
+        String json = response.getBody();
+        Joke joke;
+
+        joke = new Gson().fromJson(json, Joke.class);
+        System.out.println(joke.getFullJoke());
+        return joke.getFullJoke();
+    }
 }
+
