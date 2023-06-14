@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
 import java.util.*;
 
 public class MessagesBot extends TelegramLongPollingBot {
@@ -21,7 +22,7 @@ public class MessagesBot extends TelegramLongPollingBot {
         this.chatIds = new ArrayList<>();
 //
 //        createButton("joke");
-//        createButton("weather");
+//        createButton("cat_facts");
 //        createButton("numbers information");
 //        createButton("numbers");
 //        createButton("quotes");
@@ -29,11 +30,11 @@ public class MessagesBot extends TelegramLongPollingBot {
         jokeButton.setCallbackData("joke");
         buttons.add(jokeButton);
 
-        InlineKeyboardButton weatherButton = new InlineKeyboardButton("weather");
-        weatherButton.setCallbackData("weather");
-        buttons.add(weatherButton);
+        InlineKeyboardButton catsFactsButton = new InlineKeyboardButton("cats facts");
+        catsFactsButton.setCallbackData("cats facts");
+        buttons.add(catsFactsButton);
 
-        InlineKeyboardButton numbersInfoButton = new InlineKeyboardButton("numbers information");
+        InlineKeyboardButton numbersInfoButton = new InlineKeyboardButton("numbers");
         numbersInfoButton.setCallbackData("numbers");
         buttons.add(numbersInfoButton);
 
@@ -47,7 +48,7 @@ public class MessagesBot extends TelegramLongPollingBot {
 
         this.buttonMap = new HashMap<>();
         this.buttonMap.put(UserChoice.JOKE, jokeButton);
-        this.buttonMap.put(UserChoice.WEATHER, weatherButton);
+        this.buttonMap.put(UserChoice.CATS_FACTS, catsFactsButton);
         this.buttonMap.put(UserChoice.NUMBER, numbersInfoButton);
         this.buttonMap.put(UserChoice.QUOTES, quotesButton);
         this.buttonMap.put(UserChoice.EXCHANGE_RATE, currencyExchangeButton);
@@ -99,15 +100,15 @@ public class MessagesBot extends TelegramLongPollingBot {
 
             switch (update.getCallbackQuery().getData()) {
                 case "joke" -> message.setText(Joke.getJokee());
-                case "weather" -> message.setText(Cat.getCat());
-                case "numbers" -> message.setText("WIP2");
-                case "quotes" -> message.setText("WIP3");
-                case "currency exchange" -> message.setText("WIP4");
+                case "cats facts" -> message.setText(Cat.getCat());
+                case "numbers" -> message.setText(NumberInfoAPI.getNumber());
+                case "quotes" -> message.setText(QuotesAPI.getQuotes());
+                case "currency exchange" -> message.setText("wip");
             }
             try {
                 execute(message);
             } catch (TelegramApiException e) {
-                throw new RuntimeException(e);
+//                throw new RuntimeException(e);
             }
         }
     }

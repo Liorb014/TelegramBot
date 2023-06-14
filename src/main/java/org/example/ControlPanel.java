@@ -1,7 +1,5 @@
 package org.example;
 
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,7 +49,7 @@ public class ControlPanel extends JPanel {
     private final String EXCHANGE_RATE = "exchange rate";
     private final String NUMBERS = "numbers";
     private final String QUOTES = "quotes";
-    private final String WEATHER = "weather";
+    private final String CATS_FACTS = "cats facts";
 
     public ControlPanel() {
         this.selectedCheckBox = 0;
@@ -64,7 +62,7 @@ public class ControlPanel extends JPanel {
         this.checkboxList = new ArrayList<>();
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(0), this.JOKES, UserChoice.JOKE));
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(1), this.NUMBERS, UserChoice.NUMBER));
-        this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(2), this.WEATHER, UserChoice.WEATHER));
+        this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(2), this.CATS_FACTS, UserChoice.CATS_FACTS));
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(3), this.QUOTES, UserChoice.QUOTES));
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(4), this.EXCHANGE_RATE, UserChoice.EXCHANGE_RATE));
         for (JCheckBox checkBox : this.checkboxList) {
@@ -153,14 +151,5 @@ public class ControlPanel extends JPanel {
     private int keepOtherButtonsInSpace(int index) {
         return this.OPTIONS_START_POINT_Y + this.OTHER_OPTION_BOXES_MARGIN * index;
     }
-//    public void addButton(UserChoice name){
-//        MessagesBot.userChoice.stream().forEach(choice ->{
-//
-//        } );
-//        if(name.equals(UserChoice.JOKE)){
-//            InlineKeyboardButton jokeButton = new InlineKeyboardButton("joke");
-//            jokeButton.setCallbackData("joke");
-//            MessagesBot.buttons.add(jokeButton);
-//        }
-//    }
+
 }
