@@ -53,9 +53,6 @@ public class Charts extends JPanel {
         this.setLayout(null);
         this.setOpaque(true);
         this.setDoubleBuffered(true);
-        JLabel graphLabel = new JLabel(icon);
-        graphLabel.setBounds(0, 0, Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
-        graphLabel.setVisible(true);
         JButton exitButton = new JButton("X");
         exitButton.setFont(new Font("Ariel", Font.BOLD , 12));
         exitButton.setBounds(0, 0, 50, 50);
