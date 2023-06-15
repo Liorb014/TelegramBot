@@ -57,10 +57,10 @@ public class MessagesBot extends TelegramLongPollingBot {
         this.buttonMap.put(UserChoice.EXCHANGE_RATE, currencyExchangeButton);
     }
 
-    private void createButton(String name) {
-        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton(name);
-        inlineKeyboardButton.setCallbackData(name);
-        buttons.add(inlineKeyboardButton);
+    private void createUniversityButton(String country) {
+        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton(country);
+        inlineKeyboardButton.setCallbackData(country + "-universities");
+        universitiesButtons.add(inlineKeyboardButton);
     }
 
     @Override
@@ -72,6 +72,7 @@ public class MessagesBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return "6264561273:AAHrWL7V3qIHRIVafPTrQU0SKlhJC_XjsI8";
     }
+
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -128,10 +129,10 @@ public class MessagesBot extends TelegramLongPollingBot {
     }
 
     public void addButton(UserChoice choice) {
-        this.activeButtons1.add(this.buttonMap.get(choice));
+        this.activeApiButtons.add(this.buttonMap.get(choice));
     }
 
     public void removeButton(UserChoice choice) {
-        this.activeButtons1.remove(this.buttonMap.get(choice));
+        this.activeApiButtons.remove(this.buttonMap.get(choice));
     }
 }

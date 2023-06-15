@@ -52,6 +52,7 @@ public class ControlPanel extends JPanel {
     private final String CATS_FACTS = "cats facts";
 
     public ControlPanel() {
+        this.bot = Main.activateTelegramBot();
         this.selectedCheckBox = 0;
         this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
         this.setBackground(new Color(BG_RED_AMOUNT, BG_GREEN_AMOUNT, BG_BLUE_AMOUNT));

@@ -17,10 +17,12 @@ public class Main {
         new Window();
     }
 
-    public static void activateTelegramBot() {
+    public static MessagesBot activateTelegramBot() {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new MessagesBot());
+            MessagesBot bot = new MessagesBot();
+            botsApi.registerBot(bot);
+            return bot;
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
