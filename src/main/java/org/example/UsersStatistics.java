@@ -11,7 +11,7 @@ public class UsersStatistics extends JPanel {
     private InlineKeyboardButton mostPopularActivity;
 
     public UsersStatistics() {
-       this.differentUsersAmount = MessagesBot.chatIds.size();
+   //    this.differentUsersAmount = MessagesBot.chatIds.size();
 //       this.requestsSoFar =
     }
 }

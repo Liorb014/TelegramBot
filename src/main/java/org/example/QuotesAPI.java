@@ -75,7 +75,6 @@ public class QuotesAPI {
         String json = response.getBody();
         QuotesAPI quotes;
         quotes = new Gson().fromJson(json, QuotesAPI.class);
-        System.out.println(quotes);
         return quotes.toString();
 
     }

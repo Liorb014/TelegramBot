@@ -2,8 +2,6 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,11 +53,12 @@ public class ControlPanel extends JPanel {
     private final String CATS_FACTS = "cats facts";
 
     public ControlPanel(MessagesBot bot) {
-        this.bot=bot;
+        this.bot = bot;
         this.selectedCheckBox = 0;
         this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
         this.setBackground(new Color(BG_RED_AMOUNT, BG_GREEN_AMOUNT, BG_BLUE_AMOUNT));
         this.setLayout(null);
+        this.setDoubleBuffered(true);
         this.checkboxList = new ArrayList<>();
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(0), this.JOKES, UserChoice.JOKE));
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(1), this.NUMBERS, UserChoice.NUMBER));

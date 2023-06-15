@@ -40,7 +40,6 @@ public class NumberInfoAPI {
         NumberInfoAPI number;
 
         number = new Gson().fromJson(json, NumberInfoAPI.class);
-        System.out.println(number);
         return number.getText();
     }
 }

@@ -126,7 +126,6 @@ public class Joke {
         Joke joke;
 
         joke = new Gson().fromJson(json, Joke.class);
-        System.out.println(joke.getFullJoke());
         return joke.getFullJoke();
     }
 }

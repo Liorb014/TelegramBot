@@ -2,7 +2,6 @@ package org.example;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -11,9 +10,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class MessagesBot extends TelegramLongPollingBot {
-    private  List<Update> updateList =  new ArrayList<>();
+    private   List<Update> updateList =  new ArrayList<>();
     public  List<Long> chatIds;
     public static List<InlineKeyboardButton> menuButtons = new ArrayList<>();
     public List<InlineKeyboardButton> universitiesButtons = new ArrayList<>();
@@ -22,8 +23,10 @@ public class MessagesBot extends TelegramLongPollingBot {
     private HashSet<User> users;
     private final List<String> universitiesCountries = List.of("israel", "india", "usa", "spain", "japan","china");
 
-    private List<String> history;
+    private List<String> historyData;
     
+    final int MAX_HISTORY_DATA = 10;
+
 
     public MessagesBot() {
         chatIds = new ArrayList<>();
@@ -59,7 +62,7 @@ public class MessagesBot extends TelegramLongPollingBot {
         this.buttonMap.put(UserChoice.QUOTES, quotesButton);
         this.buttonMap.put(UserChoice.UNIVERSITIES, universities);
 
-        this.history = new ArrayList<>();
+        this.historyData = new ArrayList<>();
     }
 
     private void createUniversityButton(String country) {
@@ -81,12 +84,14 @@ public class MessagesBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+      updateList.add(update);
         SendMessage message = new SendMessage();
         if (update.hasMessage()) {
-            users.add(update.getMessage().getFrom());
+
+           users.add(update.getMessage().getFrom());
             chatIds.add(update.getMessage().getChatId());
             message.setChatId(update.getMessage().getChatId());
-            if (update.getMessage().getText().equals("/start") || update.getMessage().getText().equals("hi")) {
+            if (update.getMessage().getText().equals("/start") || update.getMessage().getText().toLowerCase().equals("hi")) {
                 List<List<InlineKeyboardButton>> keyBoard = Arrays.asList(activeApiButtons);
                 message.setText("Choose a service");
                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -94,9 +99,9 @@ public class MessagesBot extends TelegramLongPollingBot {
                 message.setReplyMarkup(inlineKeyboardMarkup);
             } else {
                 message.setText("say \" hi\" to start");
-
             }
         } else if (update.hasCallbackQuery()) {
+            addHistory(update);
             message.setChatId(update.getCallbackQuery().getFrom().getId());
             switch (update.getCallbackQuery().getData()) {
                 case "joke" -> message.setText(Joke.getJokeText());
@@ -135,15 +140,14 @@ public class MessagesBot extends TelegramLongPollingBot {
     }
 
     public void addHistory(Update update){
-        String name = update.getMessage().getFrom().getUserName();
-        String userChoose = update.getCallbackQuery().toString();
+        String name = update.getCallbackQuery().getFrom().getFirstName() ;
+        String userChoose = update.getCallbackQuery().getData();
         SimpleDateFormat format = new SimpleDateFormat("dd//MM/yy  hh:mm");
         Date date = new Date();
-        this.history.add(0,name+" "+userChoose +" "+format.format(date));
-        if(this.history.size() > 10){
-
+        this.historyData.add(0,name+" "+userChoose +" "+format.format(date));
+        if(this.historyData.size() > MAX_HISTORY_DATA){
+            this.historyData.remove(MAX_HISTORY_DATA);
         }
-
     }
     public void addButton(UserChoice choice) {
         this.activeApiButtons.add(this.buttonMap.get(choice));
@@ -183,9 +187,28 @@ public class MessagesBot extends TelegramLongPollingBot {
         this.updateList
                 .stream()
                 .filter(update -> update.hasMessage())
-                .map(update ->update.getMessage().getFrom());
+                .map(update ->update.getMessage().getFrom())
+                .collect(Collectors.groupingBy(Function.identity()));
 
     }
 
+    public  List<Update> getUpdateList() {
+        return updateList;
+    }
 
-}
+
+
+    public String getHistoryData() {
+        String result ="";
+        for (String data:this.historyData) {
+            result += data+"\n\n";
+        }
+        return result;
+    }
+
+
+
+    public List<String> getHistory() {
+
+        return this.historyData;
+    }}
