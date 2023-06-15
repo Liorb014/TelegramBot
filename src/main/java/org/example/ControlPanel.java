@@ -70,20 +70,18 @@ public class ControlPanel extends JPanel {
         }
 
         this.userHistory = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(0), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "user history");
-        this.statistics = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(1), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "statistics");
-        this.showGraph = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(2), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "graph");
+
         this.userHistory.addActionListener((e) -> {
             Window.changePanel(Window.getUsersHistory(), this);
         });
+        this.statistics = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(1), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "statistics");
+
         this.statistics.addActionListener((e) -> {
 
         });
+        this.showGraph = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(2), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "graph");
         this.showGraph.addActionListener((e) -> {
-            try {
-                Window.changePanel(new GraphOfUses(),this);
-            } catch (MalformedURLException ex) {
-                throw new RuntimeException(ex);
-            }
+            Window.changePanel(Window.getChars(), this);
         });
 
         this.setVisible(true);
