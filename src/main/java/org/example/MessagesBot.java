@@ -11,7 +11,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.*;
 
 public class MessagesBot extends TelegramLongPollingBot {
-    public static List<Long> chatIds;
+    private  List<Update> updateList =  new ArrayList<>();
+    public  List<Long> chatIds;
     public static List<InlineKeyboardButton> menuButtons = new ArrayList<>();
     public List<InlineKeyboardButton> universitiesButtons = new ArrayList<>();
     private Map<UserChoice, InlineKeyboardButton> buttonMap;
@@ -46,26 +47,6 @@ public class MessagesBot extends TelegramLongPollingBot {
         for (String countryName : universitiesCountries) {
             createUniversityButton(countryName);
         }
-//
-//        InlineKeyboardButton israel = new InlineKeyboardButton("israel");
-//        israel.setCallbackData("universities-israel");
-//        universitiesButtons.add(israel);
-//
-//        InlineKeyboardButton india = new InlineKeyboardButton("india");
-//        india.setCallbackData("universities-india");
-//        universitiesButtons.add(india);
-//
-//        InlineKeyboardButton usa = new InlineKeyboardButton("usa");
-//        usa.setCallbackData("universities-usa");
-//        universitiesButtons.add(usa);
-//
-//        InlineKeyboardButton spain = new InlineKeyboardButton("spain");
-//        spain.setCallbackData("universities-spain");
-//        universitiesButtons.add(spain);
-//
-//        InlineKeyboardButton japan = new InlineKeyboardButton("japan");
-//        japan.setCallbackData("universities-japan");
-//        universitiesButtons.add(japan);
 
         this.buttonMap = new HashMap<>();
         this.buttonMap.put(UserChoice.JOKE, jokeButton);
@@ -97,6 +78,7 @@ public class MessagesBot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         if (update.hasMessage()) {
             users.add(update.getMessage().getFrom());
+            chatIds.add(update.getMessage().getChatId());
             message.setChatId(update.getMessage().getChatId());
             if (update.getMessage().getText().equals("/start") || update.getMessage().getText().equals("hi")) {
                 List<List<InlineKeyboardButton>> keyBoard = Arrays.asList(activeApiButtons);
@@ -163,4 +145,30 @@ public class MessagesBot extends TelegramLongPollingBot {
         }
         return chatId;
     }
+
+    public HashSet<User> getUsers() {
+        return this.users;
+    }
+
+    public  List<Long> getChatIds() {
+        return this.chatIds;
+    }
+
+
+    public long getMessageCount(){
+     return   this.updateList
+               .stream()
+               .filter(update -> update.hasMessage())
+               .count();
+    }
+
+    public void getMost(){
+        this.updateList
+                .stream()
+                .filter(update -> update.hasMessage())
+                .map(update ->update.getMessage().getFrom());
+
+    }
+
+
 }
