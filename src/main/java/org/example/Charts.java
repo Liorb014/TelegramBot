@@ -14,7 +14,6 @@ public class Charts extends JPanel {
         chart.setWidth(490);
         chart.setHeight(460);
         chart.setBackgroundColor("white");
-
         chart.setConfig("""
                              
                                                {
