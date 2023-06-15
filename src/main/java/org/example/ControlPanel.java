@@ -2,6 +2,8 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class ControlPanel extends JPanel {
     private JButton statistics;
     private JButton showGraph;
     private MessagesBot bot;
+
 
     private final int BG_RED_AMOUNT = 111;
     private final int BG_GREEN_AMOUNT = 211;
@@ -51,8 +54,8 @@ public class ControlPanel extends JPanel {
     private final String QUOTES = "quotes";
     private final String CATS_FACTS = "cats facts";
 
-    public ControlPanel() {
-        this.bot = Main.activateTelegramBot();
+    public ControlPanel(MessagesBot bot) {
+        this.bot=bot;
         this.selectedCheckBox = 0;
         this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
         this.setBackground(new Color(BG_RED_AMOUNT, BG_GREEN_AMOUNT, BG_BLUE_AMOUNT));
@@ -77,7 +80,11 @@ public class ControlPanel extends JPanel {
 
         });
         this.showGraph.addActionListener((e) -> {
-
+            try {
+                Window.changePanel(new GraphOfUses(),this);
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         this.setVisible(true);
