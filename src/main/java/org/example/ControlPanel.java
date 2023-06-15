@@ -73,7 +73,7 @@ public class ControlPanel extends JPanel {
         this.statistics = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(1), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "statistics");
         this.showGraph = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(2), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "graph");
         this.userHistory.addActionListener((e) -> {
-
+            Window.changePanel(Window.getUsersHistory(), this);
         });
         this.statistics.addActionListener((e) -> {
 
@@ -145,5 +145,6 @@ public class ControlPanel extends JPanel {
     private int keepOtherButtonsInSpace(int index) {
         return this.OPTIONS_START_POINT_Y + this.OTHER_OPTION_BOXES_MARGIN * index;
     }
+
 
 }

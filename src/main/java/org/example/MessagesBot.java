@@ -149,6 +149,7 @@ public class MessagesBot extends TelegramLongPollingBot {
             this.historyData.remove(MAX_HISTORY_DATA);
         }
     }
+
     public void addButton(UserChoice choice) {
         this.activeApiButtons.add(this.buttonMap.get(choice));
     }
