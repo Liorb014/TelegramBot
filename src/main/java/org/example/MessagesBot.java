@@ -2,12 +2,14 @@ package org.example;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MessagesBot extends TelegramLongPollingBot {
@@ -18,8 +20,10 @@ public class MessagesBot extends TelegramLongPollingBot {
     private Map<UserChoice, InlineKeyboardButton> buttonMap;
     private static List<InlineKeyboardButton> activeApiButtons = new ArrayList<>();
     private HashSet<User> users;
-
     private final List<String> universitiesCountries = List.of("israel", "india", "usa", "spain", "japan","china");
+
+    private List<String> history;
+    
 
     public MessagesBot() {
         chatIds = new ArrayList<>();
@@ -54,6 +58,8 @@ public class MessagesBot extends TelegramLongPollingBot {
         this.buttonMap.put(UserChoice.NUMBER, numbersInfoButton);
         this.buttonMap.put(UserChoice.QUOTES, quotesButton);
         this.buttonMap.put(UserChoice.UNIVERSITIES, universities);
+
+        this.history = new ArrayList<>();
     }
 
     private void createUniversityButton(String country) {
@@ -128,6 +134,17 @@ public class MessagesBot extends TelegramLongPollingBot {
         }
     }
 
+    public void addHistory(Update update){
+        String name = update.getMessage().getFrom().getUserName();
+        String userChoose = update.getCallbackQuery().toString();
+        SimpleDateFormat format = new SimpleDateFormat("dd//MM/yy  hh:mm");
+        Date date = new Date();
+        this.history.add(0,name+" "+userChoose +" "+format.format(date));
+        if(this.history.size() > 10){
+
+        }
+
+    }
     public void addButton(UserChoice choice) {
         this.activeApiButtons.add(this.buttonMap.get(choice));
     }
