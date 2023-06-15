@@ -56,9 +56,6 @@ public class ControlPanel extends JPanel {
         this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
         this.setBackground(new Color(BG_RED_AMOUNT, BG_GREEN_AMOUNT, BG_BLUE_AMOUNT));
         this.setLayout(null);
-
-        this.bot = new MessagesBot();
-
         this.checkboxList = new ArrayList<>();
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(0), this.JOKES, UserChoice.JOKE));
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(1), this.NUMBERS, UserChoice.NUMBER));
@@ -68,17 +65,7 @@ public class ControlPanel extends JPanel {
         for (JCheckBox checkBox : this.checkboxList) {
             add(checkBox);
         }
-        /*
-        this.updateSelection = new JButton("update selection");
-        this.updateSelection.setBounds(CHECK_BOXES_LINE_X,keepCheckBoxInSpace(5),110,20);
-        this.updateSelection.addActionListener((e -> {
-                checkboxList
-                        .stream()
-                        .filter(box -> box.isSelected())
-                        .forEach(box -> MessagesBot.activeButtons.add(MessagesBot.getButtons(box.getText())));
-        }));
-        this.add(updateSelection);
-*/
+
         this.userHistory = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(0), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "user history");
         this.statistics = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(1), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "statistics");
         this.showGraph = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(2), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "graph");

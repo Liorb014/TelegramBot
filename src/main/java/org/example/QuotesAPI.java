@@ -1,8 +1,5 @@
 package org.example;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
@@ -10,84 +7,77 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QuotesAPI {
-    private Contents contents;
+    private String quoteAuthor;
+    private String quoteText;
 
-    public Contents getContents() {
-        return contents;
+    public String getQuoteAuthor() {
+        return quoteAuthor;
     }
 
-    public void setContents(Contents contents) {
-        this.contents = contents;
+    public void setQuoteAuthor(String quoteAuthor) {
+        this.quoteAuthor = quoteAuthor;
+    }
+
+    public String getQuoteText() {
+        return quoteText;
+    }
+
+    public void setQuoteText(String quoteText) {
+        this.quoteText = quoteText;
     }
 
     @Override
     public String toString() {
-        return "QuotesAPI{" +
-                "contents=" + contents +
-                '}';
+        return
+                "author: " + quoteAuthor + '\n' +
+                "quote: " + quoteText ;
     }
 
     public static String getQuotes() {
-        GetRequest getRequest = Unirest.get("https://quotes.rest/quote/random?language=en&limit=1");
+//        try {
+//            // Create an instance of CloseableHttpClient
+//            CloseableHttpClient httpClient = HttpClients.createDefault();
+//
+//            // Create an instance of HttpGet with the API endpoint URL
+//            HttpGet httpGet = new HttpGet("https://quotes.rest/quote/random?language=en&limit=1");
+//
+//            // Set the API key in the request headers
+//            httpGet.setHeader(HttpHeaders.AUTHORIZATION, "API_KEY " + "YCirakH9vWh2bLfxqSUZ62O4kNd8ROE3uKZAUZJEm");
+//
+//            // Execute the request and get the response
+//            CloseableHttpResponse response = httpClient.execute(httpGet);
+//
+//            // Get the response code
+//            int responseCode = response.getStatusLine().getStatusCode();
+//
+//            // Get the response body
+//            String responseBody = EntityUtils.toString(response.getEntity());
+//
+//            // Process the response
+//            System.out.println("Response Code: " + responseCode);
+//            System.out.println("Response Body: " + responseBody);
+//            return responseBody;
+//            // Close the HttpClient
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return "no";
+
+        GetRequest getRequest = Unirest.get("https://rest-quotes-api.onrender.com/api/quotes/random");
         HttpResponse<String> response;
         try {
-            response =  getRequest.asString();
+            response = getRequest.asString();
         } catch (UnirestException e) {
             throw new RuntimeException(e);
         }
-        String json = response.getStatusText();
-        QuotesAPI quote;
+        String json = response.getBody();
+        QuotesAPI quotes;
+        quotes = new Gson().fromJson(json, QuotesAPI.class);
+        System.out.println(quotes);
+        return quotes.toString();
 
-        quote = new Gson().fromJson(json, QuotesAPI.class);
-        System.out.println(quote);
-        return quote.getContents().getQuote();
-//        String apiUrl = "https://quotes.rest/quote/random?language=en&limit=1";
-//        String apiToken = "YCirakH9vWh2bLfxqSUZ62O4kNd8ROE3uKZAUZJEm";
-//
-//        try {
-//            // Create the URL object with the API endpoint
-//            URL url = new URL(apiUrl);
-//
-//            // Open a connection to the URL
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//
-//            // Set the request method (e.g., GET)
-//            connection.setRequestMethod("GET");
-//
-//            // Set the API token in the request headers
-//            connection.setRequestProperty("Authorization", "Bearer " + apiToken);
-//
-//            // Get the response code
-//            int responseCode = connection.getResponseCode();
-//
-//            if (responseCode == HttpURLConnection.HTTP_OK) {
-//                // Create an instance of ObjectMapper
-//                ObjectMapper objectMapper = new ObjectMapper();
-//
-//                // Read JSON data from the API response
-//                QuotesAPI quote = objectMapper.readValue(connection.getInputStream(), QuotesAPI.class);
-//
-//                // Access the quote data
-//                Contents contents = quote.getContents();
-//                System.out.println("Quote: " + contents.getQuote());
-//                System.out.println("Author: " + contents.getAuthor());
-//            } else {
-//                System.out.println("Error occurred. Response Code: " + responseCode);
-//            }
-//
-//
-//            // Close the connection
-//            connection.disconnect();
-//            return connection.getContent().toString();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return getQuotes().toString();
     }
 }
 

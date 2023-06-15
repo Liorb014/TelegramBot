@@ -114,7 +114,7 @@ public class Joke {
         return sb.toString();
     }
 
-    public static String getJokee() {
+    public static String getJokeText() {
         GetRequest getRequest = Unirest.get("https://v2.jokeapi.dev/joke/Any");
         HttpResponse<String> response;
         try {

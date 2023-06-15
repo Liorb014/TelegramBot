@@ -36,7 +36,8 @@ public class Cat {
                 ", length=" + length +
                 '}';
     }
-    public static String getCat() {
+
+    public static String getCatFact() {
         GetRequest getRequest = Unirest.get(PATH);
         HttpResponse<String> response;
         try {
