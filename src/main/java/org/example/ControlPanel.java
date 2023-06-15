@@ -46,7 +46,7 @@ public class ControlPanel extends JPanel {
     private final String INSTRUCTIONS = "please choose your desire \n   API to use in your bot: ";
     private final String OTHER_OPTIONS = "other options: ";
     private final String JOKES = "jokes";
-    private final String EXCHANGE_RATE = "exchange rate";
+    private final String UNIVERSITIES = "universities";
     private final String NUMBERS = "numbers";
     private final String QUOTES = "quotes";
     private final String CATS_FACTS = "cats facts";
@@ -62,7 +62,7 @@ public class ControlPanel extends JPanel {
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(1), this.NUMBERS, UserChoice.NUMBER));
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(2), this.CATS_FACTS, UserChoice.CATS_FACTS));
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(3), this.QUOTES, UserChoice.QUOTES));
-        this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(4), this.EXCHANGE_RATE, UserChoice.EXCHANGE_RATE));
+        this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(4), this.UNIVERSITIES, UserChoice.UNIVERSITIES));
         for (JCheckBox checkBox : this.checkboxList) {
             add(checkBox);
         }

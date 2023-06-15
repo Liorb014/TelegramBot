@@ -39,16 +39,40 @@ public class MessagesBot extends TelegramLongPollingBot {
         quotesButton.setCallbackData("quotes");
         menuButtons.add(quotesButton);
 
-        InlineKeyboardButton currencyExchangeButton = new InlineKeyboardButton("currency exchange");
-        currencyExchangeButton.setCallbackData("currency exchange");
-        buttons.add(currencyExchangeButton);
+        InlineKeyboardButton universities = new InlineKeyboardButton("universities");
+        universities.setCallbackData("universities");
+        menuButtons.add(universities);
+
+        for (String countryName : universitiesCountries) {
+            createUniversityButton(countryName);
+        }
+//
+//        InlineKeyboardButton israel = new InlineKeyboardButton("israel");
+//        israel.setCallbackData("universities-israel");
+//        universitiesButtons.add(israel);
+//
+//        InlineKeyboardButton india = new InlineKeyboardButton("india");
+//        india.setCallbackData("universities-india");
+//        universitiesButtons.add(india);
+//
+//        InlineKeyboardButton usa = new InlineKeyboardButton("usa");
+//        usa.setCallbackData("universities-usa");
+//        universitiesButtons.add(usa);
+//
+//        InlineKeyboardButton spain = new InlineKeyboardButton("spain");
+//        spain.setCallbackData("universities-spain");
+//        universitiesButtons.add(spain);
+//
+//        InlineKeyboardButton japan = new InlineKeyboardButton("japan");
+//        japan.setCallbackData("universities-japan");
+//        universitiesButtons.add(japan);
 
         this.buttonMap = new HashMap<>();
         this.buttonMap.put(UserChoice.JOKE, jokeButton);
         this.buttonMap.put(UserChoice.CATS_FACTS, catsFactsButton);
         this.buttonMap.put(UserChoice.NUMBER, numbersInfoButton);
         this.buttonMap.put(UserChoice.QUOTES, quotesButton);
-        this.buttonMap.put(UserChoice.EXCHANGE_RATE, currencyExchangeButton);
+        this.buttonMap.put(UserChoice.UNIVERSITIES, universities);
     }
 
     private void createUniversityButton(String country) {
@@ -128,5 +152,15 @@ public class MessagesBot extends TelegramLongPollingBot {
 
     public void removeButton(UserChoice choice) {
         this.activeApiButtons.remove(this.buttonMap.get(choice));
+    }
+
+    private long getChatId(Update update) {
+        long chatId = 0;
+        if (update.getMessage() != null) {
+            chatId = update.getMessage().getChatId();
+        } else {
+            chatId = update.getCallbackQuery().getMessage().getChatId();
+        }
+        return chatId;
     }
 }
