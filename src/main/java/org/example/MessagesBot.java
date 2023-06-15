@@ -21,14 +21,8 @@ public class MessagesBot extends TelegramLongPollingBot {
     private final List<String> universitiesCountries = List.of("israel", "india", "usa", "spain", "japan","china");
 
     public MessagesBot() {
-        //  Window window = new Window();
-        this.chatIds = new ArrayList<>();
-//
-//        createButton("joke");
-//        createButton("cat_facts");
-//        createButton("numbers information");
-//        createButton("numbers");
-//        createButton("quotes");
+        chatIds = new ArrayList<>();
+        users = new HashSet<>();
         InlineKeyboardButton jokeButton = new InlineKeyboardButton("joke");
         jokeButton.setCallbackData("joke");
         menuButtons.add(jokeButton);
