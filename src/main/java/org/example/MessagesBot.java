@@ -45,7 +45,6 @@ public class MessagesBot extends TelegramLongPollingBot {
 
         int counter = 0;
         for (UserChoice choice : UserChoice.values()) {
-            System.out.println(choice);
             this.buttonMap.put(choice, this.apiButtons.get(counter));
             counter++;
         }
@@ -195,9 +194,6 @@ public class MessagesBot extends TelegramLongPollingBot {
     }
 
     public void addButton(UserChoice choice) {
-        System.out.println(choice);
-        System.out.println(buttonMap.size());
-        System.out.println((this.buttonMap.get(choice)));
         this.activeApiButtons.add(this.buttonMap.get(choice));
     }
 
