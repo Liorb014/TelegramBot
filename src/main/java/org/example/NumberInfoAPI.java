@@ -10,7 +10,6 @@ import com.mashape.unirest.request.GetRequest;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NumberInfoAPI {
-//    public static final String PATH ="http://numbersapi.com/random";
     private String text;
 
     public String getText() {

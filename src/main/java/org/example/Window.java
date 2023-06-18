@@ -10,7 +10,6 @@ public class Window extends JFrame {
     private static HistoryPanel usersHistory;
 
     public Window() {
-
         this.bot = Main.activateTelegramBot();
         this.setTitle("bot manager");
         this.setIconImage(new ImageIcon("src/main/java/Icons/ProgramLogo.jpg").getImage());
@@ -26,7 +25,6 @@ public class Window extends JFrame {
         this.getContentPane().add(usersHistory);
         charts = new Charts();
         this.getContentPane().add(charts);
-      //  this.getContentPane().setBackground(Color.DARK_GRAY);
         this.setVisible(true);
     }
 

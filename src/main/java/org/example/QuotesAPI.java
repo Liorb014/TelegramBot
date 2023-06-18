@@ -47,7 +47,6 @@ public class QuotesAPI {
         QuotesAPI quotes;
         quotes = new Gson().fromJson(json, QuotesAPI.class);
         return quotes.toString();
-
     }
 }
 

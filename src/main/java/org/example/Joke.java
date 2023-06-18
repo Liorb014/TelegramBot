@@ -9,7 +9,6 @@ import com.mashape.unirest.request.GetRequest;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Joke {
-    //    public static final String Path= "https://v2.jokeapi.dev/joke/Any";
     private boolean error;
     private String category;
     private String type;

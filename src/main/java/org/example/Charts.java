@@ -19,33 +19,6 @@ public class Charts extends JPanel {
         chart.setWidth(490);
         chart.setHeight(460);
         chart.setBackgroundColor("white");
-        chart.setConfig("""
-                             
-                                               {
-                  type: 'bar',
-                  data: {
-                    labels: ['Day 1', 'Day 14', 'Day 1', 'Day 1', 'Day 1', 'Day 1', 'Day 10'],
-                                
-                    datasets: [
-                      {
-                        type: 'line',
-                        label: 'messages',
-                        borderColor: 'rgb(54, 162, 235)',
-                        borderWidth: 2,
-                        fill: true,
-                        data: [33, 26, 29, 89, 41, 70, 84],
-                      },
-                                 ],
-                  },
-                  options: {
-                    title: {
-                      display: true,
-                      text: 'Reuest over Time',
-                    },
-                  },
-                }
-                """);
-
         chart.setConfig("      {\n" +
                 "                  type: 'bar',\n" +
                 "                  data: {\n" +
@@ -99,7 +72,6 @@ public class Charts extends JPanel {
         super.paintComponent(g);
         g.drawImage(icon.getImage(), 0, 0, this);
     }
-
 
     private String datedate() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");

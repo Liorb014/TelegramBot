@@ -35,18 +35,4 @@ public class JsonHandler<T> {
         }
         return newItem;
     }
-
-//    public T MakeMultiObj(String Url, Class<T> type){
-//        GetRequest getRequest = Unirest.get(Url);
-//        HttpResponse<String> response;
-//        try {
-//            response = getRequest.asString();
-//        } catch (UnirestException e) {
-//            throw new RuntimeException(e);
-//        }
-//        String json = response.getBody();
-//        Unirest unirest = new Unirest();
-////        T newItem = (T).(json, type);
-////        return newItem;
-//    }
 }
