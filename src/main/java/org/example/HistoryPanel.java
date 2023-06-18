@@ -57,7 +57,6 @@ public class HistoryPanel extends JPanel {
 
     private List<String> lastTen() {
         java.util.List<Update> temp = bot.getUpdateList();
-        //   Collections.reverse(temp);
         return temp
                 .stream()
                 .parallel()

@@ -72,9 +72,8 @@ public class UniversitiesAPI {
                     response.append(line);
                 }
                 reader.close();
-                Gson gson = new Gson();
-                ObjectMapper ob = new ObjectMapper();
-                UniversitiesAPI[] universities = ob.readValue((response.toString()), UniversitiesAPI[].class);
+                ObjectMapper objectMapper = new ObjectMapper();
+                UniversitiesAPI[] universities = objectMapper.readValue((response.toString()), UniversitiesAPI[].class);
                 String uni = "";
                 for (UniversitiesAPI university : Arrays.stream(universities).limit(limit).collect(Collectors.toList())) {
                     uni += "University Name: " + university.getName() + "\n";
@@ -83,10 +82,9 @@ public class UniversitiesAPI {
                     uni += "\n\n";
                 }
                 return uni;
-            }
+            }else return "error";
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-       return "error";
     }
 }

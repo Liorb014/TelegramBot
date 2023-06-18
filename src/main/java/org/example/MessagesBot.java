@@ -183,7 +183,7 @@ public class MessagesBot extends TelegramLongPollingBot {
         }
     }
 
-    public void addHistory(Update update) {
+    public synchronized void addHistory(Update update) {
         String name = update.getCallbackQuery().getFrom().getFirstName();
         String userChoose = update.getCallbackQuery().getData();
         SimpleDateFormat format = new SimpleDateFormat("dd//MM/yy  hh:mm");
