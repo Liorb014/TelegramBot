@@ -1,5 +1,6 @@
 package org.example;
 
+import org.checkerframework.checker.units.qual.A;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -32,30 +33,25 @@ public class MessagesBot extends TelegramLongPollingBot {
     private final int MAX_HISTORY_DATA = 10;
 
     public MessagesBot() {
-        chatIds = new ArrayList<>();
-        users = new HashSet<>();
-        InlineKeyboardButton jokeButton = new InlineKeyboardButton("joke");
-        jokeButton.setCallbackData("joke");
-        menuButtons.add(jokeButton);
+        this.chatIds = new ArrayList<>();
+        this.users = new HashSet<>();
+        this.apiButtons = new ArrayList<>();
+        this.buttonMap = new HashMap<>();
+        this.historyData = new ArrayList<>();
 
-        InlineKeyboardButton catsFactsButton = new InlineKeyboardButton("cats facts");
-        catsFactsButton.setCallbackData("cats facts");
-        menuButtons.add(catsFactsButton);
+        for (String name : this.apiNames) {
+            createKeyboardButton("", name, this.apiButtons);
+        }
 
-        InlineKeyboardButton numbersInfoButton = new InlineKeyboardButton("numbers");
-        numbersInfoButton.setCallbackData("numbers");
-        menuButtons.add(numbersInfoButton);
-
-        InlineKeyboardButton quotesButton = new InlineKeyboardButton("quotes");
-        quotesButton.setCallbackData("quotes");
-        menuButtons.add(quotesButton);
-
-        InlineKeyboardButton universities = new InlineKeyboardButton("universities");
-        universities.setCallbackData("universities");
-        menuButtons.add(universities);
+        int counter = 0;
+        for (UserChoice choice : UserChoice.values()) {
+            System.out.println(choice);
+            this.buttonMap.put(choice, this.apiButtons.get(counter));
+            counter++;
+        }
 
         for (String countryName : universitiesCountries) {
-            createUniversityButton(countryName);
+            createKeyboardButton("universities-country-", countryName, this.universitiesButtons);
         }
     }
 
@@ -74,7 +70,6 @@ public class MessagesBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return "6264561273:AAHrWL7V3qIHRIVafPTrQU0SKlhJC_XjsI8";
     }
-
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -161,12 +156,10 @@ public class MessagesBot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         int buttonsPerRow = 5;
         int rowCount = (int) Math.ceil((double) optionsOfTheNumberOfUniToShow.size() / buttonsPerRow);
-
         for (int i = 0; i < rowCount; i++) {
             int startIndex = i * buttonsPerRow;
             int endIndex = Math.min(startIndex + buttonsPerRow, optionsOfTheNumberOfUniToShow.size());
             List<String> rowOptions = optionsOfTheNumberOfUniToShow.subList(startIndex, endIndex);
-
             List<InlineKeyboardButton> row = new ArrayList<>();
             for (String option : rowOptions) {
                 InlineKeyboardButton button = new InlineKeyboardButton();
@@ -259,9 +252,7 @@ public class MessagesBot extends TelegramLongPollingBot {
         return result;
     }
 
-
     public List<String> getHistory() {
-
         return this.historyData;
     }
 }

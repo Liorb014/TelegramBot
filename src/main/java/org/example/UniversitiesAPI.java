@@ -56,27 +56,15 @@ public class UniversitiesAPI {
                 '}';
     }
 
-
     public static String getUniversities(int limit , String country) {
         try {
         String apiUrl = "http://universities.hipolabs.com/search?country="+country;
-        // Create the URL object with the API endpoint
         URL url = new URL(apiUrl);
-
-        // Open a connection to the URL
         HttpURLConnection connection = null;
-
             connection = (HttpURLConnection) url.openConnection();
-
-
-            // Set the request method (e.g., GET)
             connection.setRequestMethod("GET");
-
-            // Get the response code
             int responseCode = connection.getResponseCode();
-
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                // Read the response body
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder response = new StringBuilder();
                 String line;
@@ -84,8 +72,6 @@ public class UniversitiesAPI {
                     response.append(line);
                 }
                 reader.close();
-
-                // Use Gson to deserialize the JSON response
                 Gson gson = new Gson();
                 ObjectMapper ob = new ObjectMapper();
                 UniversitiesAPI[] universities = ob.readValue((response.toString()), UniversitiesAPI[].class);
