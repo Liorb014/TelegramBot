@@ -1,6 +1,7 @@
 package org.example;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -86,7 +87,8 @@ public class UniversitiesAPI {
 
                 // Use Gson to deserialize the JSON response
                 Gson gson = new Gson();
-                UniversitiesAPI[] universities = gson.fromJson(response.toString(), UniversitiesAPI[].class);
+                ObjectMapper ob = new ObjectMapper();
+                UniversitiesAPI[] universities = ob.readValue((response.toString()), UniversitiesAPI[].class);
                 String uni = "";
                 for (UniversitiesAPI university : Arrays.stream(universities).limit(limit).collect(Collectors.toList())) {
                     uni += "University Name: " + university.getName() + "\n";

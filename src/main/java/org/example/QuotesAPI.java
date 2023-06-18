@@ -36,35 +36,6 @@ public class QuotesAPI {
     }
 
     public static String getQuotes() {
-//        try {
-//            // Create an instance of CloseableHttpClient
-//            CloseableHttpClient httpClient = HttpClients.createDefault();
-//
-//            // Create an instance of HttpGet with the API endpoint URL
-//            HttpGet httpGet = new HttpGet("https://quotes.rest/quote/random?language=en&limit=1");
-//
-//            // Set the API key in the request headers
-//            httpGet.setHeader(HttpHeaders.AUTHORIZATION, "API_KEY " + "YCirakH9vWh2bLfxqSUZ62O4kNd8ROE3uKZAUZJEm");
-//
-//            // Execute the request and get the response
-//            CloseableHttpResponse response = httpClient.execute(httpGet);
-//
-//            // Get the response code
-//            int responseCode = response.getStatusLine().getStatusCode();
-//
-//            // Get the response body
-//            String responseBody = EntityUtils.toString(response.getEntity());
-//
-//            // Process the response
-//            System.out.println("Response Code: " + responseCode);
-//            System.out.println("Response Body: " + responseBody);
-//            return responseBody;
-//            // Close the HttpClient
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return "no";
-
         GetRequest getRequest = Unirest.get("https://rest-quotes-api.onrender.com/api/quotes/random");
         HttpResponse<String> response;
         try {
