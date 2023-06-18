@@ -5,7 +5,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.text.SimpleDateFormat;
@@ -22,6 +25,7 @@ public class MessagesBot extends TelegramLongPollingBot {
     private static List<InlineKeyboardButton> activeApiButtons = new ArrayList<>();
     private HashSet<User> users;
     private final List<String> universitiesCountries = List.of("israel", "india", "usa", "spain", "japan","china");
+    private final List<String> optionsOfTheNumberOfUniToShow = List.of("1", "2", "3","4","5","6","7","8","9","10");
 
     private List<String> historyData;
     
@@ -114,6 +118,8 @@ public class MessagesBot extends TelegramLongPollingBot {
                     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                     inlineKeyboardMarkup.setKeyboard(keyBoard);
                     message.setReplyMarkup(inlineKeyboardMarkup);
+                    sendSelectionBox(getChatId(update));
+
                 }
                 case "israel-universities" -> message.setText(UniversitiesAPI.getUniversities(5, "israel"));
                 case "india-universities" -> message.setText(UniversitiesAPI.getUniversities(5, "india"));
@@ -127,6 +133,44 @@ public class MessagesBot extends TelegramLongPollingBot {
             execute(message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void sendSelectionBox(long chatId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(String.valueOf(chatId));
+        message.setText("Please select an option:");
+
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+
+        int buttonsPerRow = 4; // Adjust the number of buttons per row as needed
+        int rowCount = (int) Math.ceil((double) optionsOfTheNumberOfUniToShow.size() / buttonsPerRow);
+
+        for (int i = 0; i < rowCount; i++) {
+            int startIndex = i * buttonsPerRow;
+            int endIndex = Math.min(startIndex + buttonsPerRow, optionsOfTheNumberOfUniToShow.size());
+            List<String> rowOptions = optionsOfTheNumberOfUniToShow.subList(startIndex, endIndex);
+
+            List<InlineKeyboardButton> row = new ArrayList<>();
+            for (String option : rowOptions) {
+                InlineKeyboardButton button = new InlineKeyboardButton();
+                button.setText(option);
+                button.setCallbackData(option);
+                row.add(button);
+            }
+            rows.add(row);
+        }
+
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        keyboardMarkup.setKeyboard(rows);
+
+        message.setReplyMarkup(keyboardMarkup);
+
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
