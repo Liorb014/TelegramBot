@@ -1,6 +1,5 @@
 package org.example;
 
-import org.checkerframework.checker.units.qual.A;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -16,16 +15,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class MessagesBot extends TelegramLongPollingBot {
-    private Map<Long, Integer> uniNumbers = new HashMap();
-    private List<Update> updateList = new ArrayList<>();
+    private Map<Long, Integer> uniNumbers;
+    private List<Update> updateList;
     private List<Long> chatIds;
     private List<String> historyData;
     private HashSet<User> users;
+    private List<InlineKeyboardButton> universitiesButtons;
     private List<InlineKeyboardButton> apiButtons;
-    private List<InlineKeyboardButton> universitiesButtons = new ArrayList<>();
-    private Map<UserChoice, InlineKeyboardButton> buttonMap;
+    private Map<UserChoice, InlineKeyboardButton> apiButtonMap;
     private static List<InlineKeyboardButton> activeApiButtons = new ArrayList<>();
-    public static List<InlineKeyboardButton> menuButtons = new ArrayList<>();
 
     private final List<String> apiNames = List.of("joke", "cats facts", "numbers", "quotes", "universities");
     private final List<String> universitiesCountries = List.of("israel", "india", "usa", "spain", "japan", "china");
@@ -36,8 +34,11 @@ public class MessagesBot extends TelegramLongPollingBot {
         this.chatIds = new ArrayList<>();
         this.users = new HashSet<>();
         this.apiButtons = new ArrayList<>();
-        this.buttonMap = new HashMap<>();
+        this.apiButtonMap = new HashMap<>();
         this.historyData = new ArrayList<>();
+        this.universitiesButtons =new ArrayList<>();
+        this.updateList = new ArrayList<>();
+        this.uniNumbers = new HashMap();
 
         for (String name : this.apiNames) {
             createKeyboardButton("", name, this.apiButtons);
@@ -45,7 +46,7 @@ public class MessagesBot extends TelegramLongPollingBot {
 
         int counter = 0;
         for (UserChoice choice : UserChoice.values()) {
-            this.buttonMap.put(choice, this.apiButtons.get(counter));
+            this.apiButtonMap.put(choice, this.apiButtons.get(counter));
             counter++;
         }
 
@@ -194,11 +195,11 @@ public class MessagesBot extends TelegramLongPollingBot {
     }
 
     public void addButton(UserChoice choice) {
-        this.activeApiButtons.add(this.buttonMap.get(choice));
+        this.activeApiButtons.add(this.apiButtonMap.get(choice));
     }
 
     public void removeButton(UserChoice choice) {
-        this.activeApiButtons.remove(this.buttonMap.get(choice));
+        this.activeApiButtons.remove(this.apiButtonMap.get(choice));
     }
 
     private long getChatId(Update update) {
