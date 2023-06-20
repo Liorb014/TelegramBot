@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Charts extends JPanel {
+public class Charts extends Panel {
     private ImageIcon icon;
 
     public Charts(MessagesBot bot) {

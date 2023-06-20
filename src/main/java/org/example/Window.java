@@ -6,14 +6,16 @@ import java.awt.*;
 public class Window extends JFrame {
     private MessagesBot bot;
     private static ControlPanel controlPanel;
-    private static Charts charts;
     private static HistoryPanel usersHistory;
+    private static StatisticsPanel statistics;
+    private static Charts charts;
+
 
     public Window() {
         this.bot = Main.activateTelegramBot();
         this.setTitle("bot manager");
         this.setIconImage(new ImageIcon("src/main/java/Icons/ProgramLogo.jpg").getImage());
-        this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
+        this.setSize(Panel.WINDOW_SIZE, Panel.WINDOW_SIZE);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -23,7 +25,9 @@ public class Window extends JFrame {
         this.getContentPane().add(controlPanel);
         usersHistory = new HistoryPanel(this.bot);
         this.getContentPane().add(usersHistory);
-        charts = new Charts();
+        statistics = new StatisticsPanel(this.bot);
+        this.getContentPane().add(statistics);
+        charts = new Charts(this.bot);
         this.getContentPane().add(charts);
         this.setVisible(true);
     }
@@ -44,11 +48,17 @@ public class Window extends JFrame {
         return controlPanel;
     }
 
+    public static HistoryPanel getUsersHistory() {
+        return usersHistory;
+    }
+
+    public static  StatisticsPanel getStatistics(){
+        return statistics;
+    }
+
     public static Charts getChars() {
         return charts;
     }
 
-    public static HistoryPanel getUsersHistory() {
-        return usersHistory;
-    }
+
 }

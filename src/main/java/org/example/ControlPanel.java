@@ -71,15 +71,15 @@ public class ControlPanel extends Panel {
         }
 
         this.userHistory = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(0), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "user history");
-
         this.userHistory.addActionListener((e) -> {
             Window.changePanel(Window.getUsersHistory(), this);
         });
+
         this.statistics = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(1), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "statistics");
-
         this.statistics.addActionListener((e) -> {
-
+            Window.changePanel(Window.getStatistics(), this);
         });
+
         this.showGraph = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(2), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, "graph");
         this.showGraph.addActionListener((e) -> {
             Window.changePanel(Window.getChars(), this);
