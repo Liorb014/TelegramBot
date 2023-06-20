@@ -1,6 +1,5 @@
 package org.example;
 
-import org.checkerframework.checker.units.qual.A;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -8,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.*;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -18,9 +17,9 @@ import java.util.stream.Collectors;
 public class MessagesBot extends TelegramLongPollingBot {
     private Map<Long, Integer> uniNumbers = new HashMap();
     private List<Update> updateList = new ArrayList<>();
-    private List<Long> chatIds;
+    //   private List<Long> chatIds;
     private List<String> historyData;
-    private HashSet<User> users;
+    //  private HashSet<User> users;
     private List<InlineKeyboardButton> apiButtons;
     private List<InlineKeyboardButton> universitiesButtons = new ArrayList<>();
     private Map<UserChoice, InlineKeyboardButton> buttonMap;
@@ -28,13 +27,14 @@ public class MessagesBot extends TelegramLongPollingBot {
     public static List<InlineKeyboardButton> menuButtons = new ArrayList<>();
 
     private final List<String> apiNames = List.of("joke", "cats facts", "numbers", "quotes", "universities");
-    private final List<String> universitiesCountries = List.of("israel", "india", "usa", "spain", "japan", "china");
+    private final List<String> universitiesCountries = List.of("israel", "india", "united states", "spain", "japan", "china");
     private final List<String> optionsOfTheNumberOfUniToShow = List.of("1", "2", "3", "4", "5", "10", "15", "20", "25", "30");
+    private List<String> numberTypeList = List.of("trivia", "math", "date", "year");
     private final int MAX_HISTORY_DATA = 10;
 
     public MessagesBot() {
-        this.chatIds = new ArrayList<>();
-        this.users = new HashSet<>();
+        //    this.chatIds = new ArrayList<>();
+        //     this.users = new HashSet<>();
         this.apiButtons = new ArrayList<>();
         this.buttonMap = new HashMap<>();
         this.historyData = new ArrayList<>();
@@ -85,8 +85,8 @@ public class MessagesBot extends TelegramLongPollingBot {
                 }
             }
 
-            users.add(update.getMessage().getFrom());
-            chatIds.add(update.getMessage().getChatId());
+            //    users.add(update.getMessage().getFrom());
+            //  chatIds.add(update.getMessage().getChatId());
             message.setChatId(update.getMessage().getChatId());
             if (update.getMessage().getText().equals("/start") || update.getMessage().getText().toLowerCase().equals("hi")) {
                 List<List<InlineKeyboardButton>> keyBoard = Arrays.asList(activeApiButtons);
@@ -105,38 +105,63 @@ public class MessagesBot extends TelegramLongPollingBot {
 
             if (s.contains("universities")) {
                 if (s.equals("universities")) {
-                    sendSelectionBox(update);
+                    editQueryMessage(update, "choose number of institutions : ", makeKeyboard(optionsOfTheNumberOfUniToShow, "universities-number-"));
                     return;
-                }
-                if (s.contains("universities-number-")) {
+                } else if (s.contains("universities-number-")) {
                     uniNumbers.put(chatId, Integer.valueOf(s.replace("universities-number-", "")));
-                    List<List<InlineKeyboardButton>> keyBoard = Arrays.asList(universitiesButtons);
-                    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-                    inlineKeyboardMarkup.setKeyboard(keyBoard);
-                    editQueryMessage(update, "choose country institutions origin  : ", inlineKeyboardMarkup);
+                    editQueryMessage(update, "choose country institutions origin  : ", makeKeyboard(universitiesCountries, "universities-country-"));
                     return;
-                }
-
-                if (s.contains("universities-country-")) {
+                } else if (s.contains("universities-country-")) {
                     String country = s.replace("universities-country-", "");
-                    if (country.equals("usa")) {
-                        country = "united+states";
-                    }
+                    country = country.replace(" ", "+");
                     message.setText(UniversitiesAPI.getUniversities(uniNumbers.get(chatId), country));
+                    addHistory(update);
                 }
+            } else if (s.contains("numbers")) {
+                if (s.equals("numbers")) {
+                    editQueryMessage(update, "choose type of fact  : ", makeKeyboard(numberTypeList, "numbers-type-"));
+                    return;
+                } else if (s.contains("numbers-type-")) {
+                    String type = s.replace("numbers-type-", "");
+                    message.setText(NumberInfoAPI.getNumber(type));
+                    addHistory(update);
+                }
+            } else if (s.contains("cat")) {
+                message.setText(Cat.getCatFact());
+                addHistory(update);
+            } else if (s.contains("quotes")) {
+
+            } else if (s.contains("joke")) {
+
             }
-            switch (s) {
-                case "joke" -> message.setText(Joke.getJokeText());
-                case "cats facts" -> message.setText(Cat.getCatFact());
-                case "numbers" -> message.setText(NumberInfoAPI.getNumber());
-                case "quotes" -> message.setText(QuotesAPI.getQuotes());
-            }
+
         }
         try {
             execute(message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private InlineKeyboardMarkup makeKeyboard(List<String> list, String callBackData) {
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        int buttonsPerRow = 5;
+        int rowCount = (int) Math.ceil((double) list.size() / buttonsPerRow);
+        for (int i = 0; i < rowCount; i++) {
+            int startIndex = i * buttonsPerRow;
+            int endIndex = Math.min(startIndex + buttonsPerRow, list.size());
+            List<String> rowOptions = list.subList(startIndex, endIndex);
+            List<InlineKeyboardButton> row = new ArrayList<>();
+            for (String option : rowOptions) {
+                InlineKeyboardButton button = new InlineKeyboardButton();
+                button.setText(option);
+                button.setCallbackData(callBackData + option);
+                row.add(button);
+            }
+            rows.add(row);
+        }
+        return new InlineKeyboardMarkup(rows);
+
     }
 
     public void editQueryMessage(Update update, String text, InlineKeyboardMarkup keyboard) {
@@ -170,7 +195,8 @@ public class MessagesBot extends TelegramLongPollingBot {
         }
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rows);
-        editQueryMessage(update, "choose number of institutions : ", inlineKeyboardMarkup);
+        editQueryMessage(update, "choose number of institutions : ", makeKeyboard(optionsOfTheNumberOfUniToShow, "universities-number-"));
+        //editQueryMessage(update, "choose number of institutions : ", inlineKeyboardMarkup);
     }
 
     private void send(SendMessage sendMessage, String text) {
@@ -211,13 +237,13 @@ public class MessagesBot extends TelegramLongPollingBot {
         return chatId;
     }
 
-    public HashSet<User> getUsers() {
-        return this.users;
-    }
+//    public HashSet<User> getUsers() {
+//        return this.users;
+//    }
 
-    public List<Long> getChatIds() {
-        return this.chatIds;
-    }
+//    public List<Long> getChatIds() {
+//        return this.chatIds;
+//    }
 
 
     public long getMessageCount() {

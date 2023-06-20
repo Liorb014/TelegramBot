@@ -13,7 +13,8 @@ import java.util.Date;
 public class Charts extends JPanel {
     private ImageIcon icon;
 
-    public Charts() {
+    public Charts(MessagesBot bot) {
+        super(bot);
         datedate();
         QuickChart chart = new QuickChart();
         chart.setWidth(490);
@@ -50,11 +51,11 @@ public class Charts extends JPanel {
             throw new RuntimeException(e);
         }
 
-        this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
-        this.setBackground(Color.BLACK);
-        this.setLayout(null);
-        this.setOpaque(true);
-        this.setDoubleBuffered(true);
+//        this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
+//        this.setBackground(Color.BLACK);
+//        this.setLayout(null);
+//        this.setOpaque(true);
+//        this.setDoubleBuffered(true);
         JButton exitButton = new JButton("X");
         exitButton.setFont(new Font("Ariel", Font.BOLD, 12));
         exitButton.setBounds(0, 0, 50, 50);
@@ -64,7 +65,7 @@ public class Charts extends JPanel {
         exitButton.addActionListener((event) -> {
             Window.changePanel(Window.getControlPanel(), this);
         });
-        this.setVisible(false);
+   //     this.setVisible(false);
     }
 
     @Override

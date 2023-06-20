@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ControlPanel extends JPanel {
+public class ControlPanel extends Panel {
 
     private List<JCheckBox> checkboxList;
     private Integer selectedCheckBox;
@@ -13,7 +13,7 @@ public class ControlPanel extends JPanel {
     private JButton userHistory;
     private JButton statistics;
     private JButton showGraph;
-    private MessagesBot bot;
+    // private MessagesBot bot;
 
 
     private final int BG_RED_AMOUNT = 111;
@@ -53,12 +53,13 @@ public class ControlPanel extends JPanel {
     private final String CATS_FACTS = "cats facts";
 
     public ControlPanel(MessagesBot bot) {
-        this.bot = bot;
+        super(bot);
+        // this.bot = bot;
         this.selectedCheckBox = 0;
-        this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
-        this.setBackground(new Color(BG_RED_AMOUNT, BG_GREEN_AMOUNT, BG_BLUE_AMOUNT));
-        this.setLayout(null);
-        this.setDoubleBuffered(true);
+//        this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
+//        this.setBackground(new Color(BG_RED_AMOUNT, BG_GREEN_AMOUNT, BG_BLUE_AMOUNT));
+//        this.setLayout(null);
+//        this.setDoubleBuffered(true);
         this.checkboxList = new ArrayList<>();
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(0), this.JOKES, UserChoice.JOKE));
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(1), this.NUMBERS, UserChoice.NUMBER));
@@ -83,7 +84,7 @@ public class ControlPanel extends JPanel {
         this.showGraph.addActionListener((e) -> {
             Window.changePanel(Window.getChars(), this);
         });
-
+        super.setOpened(true);
         this.setVisible(true);
     }
 
@@ -103,15 +104,15 @@ public class ControlPanel extends JPanel {
         jCheckBox.setBackground(null);
         jCheckBox.addActionListener((event) -> {
             if (jCheckBox.isSelected()) {
-                this.bot.addButton(userSelection);
+                super.getBot().addButton(userSelection);
                 if (this.selectedCheckBox < MAX_ALLOWED_CHOICES) {
                     this.selectedCheckBox++;
                 } else {
-                    this.bot.removeButton(userSelection);
+                    super.getBot().removeButton(userSelection);
                     jCheckBox.setSelected(false);
                 }
             } else {
-                this.bot.removeButton(userSelection);
+                super.getBot().removeButton(userSelection);
                 this.selectedCheckBox--;
             }
         });
@@ -131,10 +132,10 @@ public class ControlPanel extends JPanel {
         drawString(g, this.OTHER_OPTIONS, this.OTHER_OPTION_X, this.OTHER_OPTION_Y);
     }
 
-    private void drawString(Graphics g, String text, int x, int y) {
-        for (String line : text.split("\n"))
-            g.drawString(line, x, y += g.getFontMetrics().getHeight());
-    }
+//    private void drawString(Graphics g, String text, int x, int y) {
+//        for (String line : text.split("\n"))
+//            g.drawString(line, x, y += g.getFontMetrics().getHeight());
+//    }
 
     private int keepCheckBoxInSpace(int index) {
         return this.OPTIONS_START_POINT_Y + this.CHECK_BOXES_MARGIN * index;

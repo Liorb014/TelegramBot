@@ -27,8 +27,8 @@ public class NumberInfoAPI {
                 '}';
     }
 
-    public static String getNumber() {
-        GetRequest getRequest = Unirest.get("http://numbersapi.com/random?json");
+    public static String getNumber(String type) {
+        GetRequest getRequest = Unirest.get("http://numbersapi.com/random/"+type+"?json");
         HttpResponse<String> response;
         try {
             response = getRequest.asString();

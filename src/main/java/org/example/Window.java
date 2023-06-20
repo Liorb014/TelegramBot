@@ -28,10 +28,12 @@ public class Window extends JFrame {
         this.setVisible(true);
     }
 
-    public static void changePanel(JPanel newPanel, JPanel oldPanel) {
+    public static void changePanel(Panel newPanel, Panel oldPanel) {
         try {
             newPanel.setVisible(true);
             newPanel.requestFocusInWindow();
+            newPanel.setOpened(true);
+            oldPanel.setOpened(false);
             oldPanel.setVisible(false);
         } catch (NullPointerException e) {
         }
