@@ -1,11 +1,18 @@
 package org.example;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Joke {
@@ -113,8 +120,10 @@ public class Joke {
         return sb.toString();
     }
 
-    public static String getJokeText() {
-        GetRequest getRequest = Unirest.get("https://v2.jokeapi.dev/joke/Any");
+    public static String getJokeText(String type, String lang, String amount) {
+        String path = "https://v2.jokeapi.dev/joke/" + type + "?lang=" + lang + "&amount=" + amount;
+        System.out.println(path);
+        GetRequest getRequest = Unirest.get("https://v2.jokeapi.dev/joke/" + type + "?lang=" + lang + "&amount=" + amount);
         HttpResponse<String> response;
         try {
             response = getRequest.asString();
@@ -122,10 +131,57 @@ public class Joke {
             throw new RuntimeException(e);
         }
         String json = response.getBody();
-        Joke joke;
 
-        joke = new Gson().fromJson(json, Joke.class);
-        return joke.getFullJoke();
+        System.out.println("a");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Joke[] jokes;
+        try {
+            jokes= objectMapper.readValue(json, Joke[].class);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("b");
+        String s = "";
+        for (Joke p : jokes
+        ) {
+            s += p.getFullJoke() + "\n";
+        }
+        System.out.println(s);
+        return s;
+    }
+
+    public static  String nnn(String type, String lang, String amount) {
+        try {
+            String apiUrl =  "https://v2.jokeapi.dev/joke/" + type + "?lang=" + lang + "&amount=" + amount;
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = null;
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+                ObjectMapper objectMapper = new ObjectMapper();
+                Joke[] jokes = objectMapper.readValue((response.toString()), Joke[].class);
+                System.out.println("aa");
+
+                String s = "";
+                for (Joke p : jokes
+                ) {
+                    s += p.getFullJoke() + "\n";
+                }
+                System.out.println(s);
+                return s;
+            }else return "error";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

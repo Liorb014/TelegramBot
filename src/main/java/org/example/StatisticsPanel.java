@@ -1,6 +1,14 @@
 package org.example;
 
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
+
 import java.awt.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class StatisticsPanel extends Panel {
     private int amountOfRequests;
@@ -14,11 +22,13 @@ public class StatisticsPanel extends Panel {
         super(bot);
         new Thread(() -> {
             while (true) {
-                while (super.isOpened()) {
-                    this.amountOfRequests = bot.getAmountOfRequests();
-                    this.amountOfUniqUsers = bot.getAmountOfUniqUsers();
-                    this.theMostActivateUser = bot.GetTheMostActivateUser();
-                    this.theMostPopularActivity = bot.getHistoryData();
+//dont delete the sout , Daniel i am looking at you
+                System.out.print("");
+                if (super.isOpened()) {
+                    this.amountOfRequests = getAmountOfRequests();
+                    this.amountOfUniqUsers = getAmountOfUniqUsers();
+                    this.theMostActivateUser = getTheMostActivateUser();
+                    this.theMostPopularActivity = getTheMostPopularActivity();
                     repaint();
                     Utils.sleep(1);
                 }
