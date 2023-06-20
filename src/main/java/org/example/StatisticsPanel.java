@@ -7,19 +7,11 @@ public class StatisticsPanel extends Panel {
     private int amountOfUniqUsers;
     private String theMostActivateUser;
     private String theMostPopularActivity;
-  //  private MessagesBot bot;
-
     private final int X_LINE_OF_TEXT = 80;
     private final int SPACE_BETWEEN_LINES = 100;
 
     public StatisticsPanel(MessagesBot bot) {
         super(bot);
-//        this.bot = bot;
-//        this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
-//        this.setLayout(null);
-//        this.setOpaque(true);
-//        this.setBackground(Color.cyan);
-//        this.setDoubleBuffered(true);
         new Thread(() -> {
             while (true) {
                 while (super.isOpened()) {
@@ -33,7 +25,6 @@ public class StatisticsPanel extends Panel {
             }
         }).start();
         exitButton(this);
-//        this.setVisible(false);
     }
 
     @Override

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HistoryPanel extends Panel {
-  //  private MessagesBot bot;
     private JLabel historyText;
 
     public HistoryPanel(MessagesBot bot) {
