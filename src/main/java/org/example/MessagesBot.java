@@ -277,4 +277,44 @@ public class MessagesBot extends TelegramLongPollingBot {
     public List<String> getHistory() {
         return this.historyData;
     }
+
+    public int getAmountOfRequests() {
+        return this.updateList.size();
+    }
+
+    public int getAmountOfUniqUsers() {
+        return (int) this.updateList.stream()
+                .filter(Update::hasMessage)
+                .map(update -> update.getMessage().getFrom().getId())
+                .distinct()
+                .count();
+    }
+
+    public String GetTheMostActivateUser() {
+        if (updateList.stream().filter(update -> update.hasCallbackQuery()).count()<=0){
+            return "null";
+        }else {
+            Map<Long, Long> temp = this.updateList.stream()
+                    .filter(update -> update.hasCallbackQuery())
+                    .map(update -> update.getCallbackQuery().getFrom().getId())
+                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+            List<Long > chatId =  temp.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                    .limit(1).
+                    map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            return getUserByChatId(chatId.get(0)).getFirstName();
+        }
+    }
+
+    private User getUserByChatId(long userID) {
+      return this.updateList.stream()
+                .filter(Update::hasMessage)
+                .filter(update -> update.getMessage().getFrom().getId().equals(userID))
+                .map(update -> update.getMessage().getFrom())
+                .findFirst()
+                .orElse(null);
+    }
 }
