@@ -58,9 +58,9 @@ public class UniversitiesAPI {
 
     public static String getUniversities(int limit , String country) {
         try {
-        String apiUrl = "http://universities.hipolabs.com/search?country="+country;
-        URL url = new URL(apiUrl);
-        HttpURLConnection connection = null;
+            String apiUrl = "http://universities.hipolabs.com/search?country="+country;
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = null;
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             int responseCode = connection.getResponseCode();
