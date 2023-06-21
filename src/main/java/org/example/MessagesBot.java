@@ -21,6 +21,7 @@ public class MessagesBot extends TelegramLongPollingBot {
     private List<InlineKeyboardButton> apiButtons;
     private Map<UserChoice, InlineKeyboardButton> buttonMap;
     private List<InlineKeyboardButton> activeApiButtons;
+
     private final List<String> API_NAMES_LIST = List.of("joke", "numbers", "cats facts", "quotes", "universities");
     private final List<String> JOKES_CATEGORIES = List.of("any", "Programming", "Miscellaneous", "Dark", "Pun", "Spooky", "Christmas");
     private final List<String> JOKES_LANGUAGE = List.of("cs", "de", "en", "es", "fr", "pt");
