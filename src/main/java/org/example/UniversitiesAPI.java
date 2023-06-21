@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UniversitiesAPI {
-   // UniversitiesAPI[] universitiesAPIList= new UniversitiesAPI[];
+    //    UniversitiesAPI[] universitiesAPIList= new UniversitiesAPI[30];
     private String name;
     private String country;
     private List<String> domains;
@@ -51,16 +51,17 @@ public class UniversitiesAPI {
 
     @Override
     public String toString() {
-        return "UniversitiesAPI{" +
-                "name='" + name + '\'' +
-                ", country='" + country + '\'' +
-                ", domains=" + domains +
-                '}';
+        String uni = "";
+            uni += "University Name: " + this.getName() + "\n";
+            uni += "Country: " + this.getCountry() + "\n";
+            uni += "website: " + this.getDomains().get(0);
+            uni += "\n\n";
+            return uni;
     }
 
-    public static String getUniversities(int limit , String country) {
+    public static String getUniversities(int limit, String country) {
         try {
-            String apiUrl = "http://universities.hipolabs.com/search?country="+country;
+            String apiUrl = "http://universities.hipolabs.com/search?country=" + country;
             URL url = new URL(apiUrl);
             HttpURLConnection connection = null;
             connection = (HttpURLConnection) url.openConnection();
@@ -84,7 +85,7 @@ public class UniversitiesAPI {
                     uni += "\n\n";
                 }
                 return uni;
-            }else return "error";
+            } else return "error";
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

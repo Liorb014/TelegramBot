@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 
 public class JsonHandler<T> {
     private final Class<T> TYPE;
@@ -42,7 +44,7 @@ public class JsonHandler<T> {
 //    }
 //
 
-    public String readJson(String path) {
+    public T readJson(String path) {
         try {
             URL url = new URL(path);
             HttpURLConnection connection;
@@ -59,10 +61,10 @@ public class JsonHandler<T> {
                 reader.close();
                 ObjectMapper objectMapper = new ObjectMapper();
                 T item = objectMapper.readValue((response.toString()), this.TYPE);
-
-                return item.toString();
+                return item;
             } else return null;
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             throw new RuntimeException(e);
         }
     }

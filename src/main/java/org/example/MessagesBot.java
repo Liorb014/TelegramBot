@@ -1,6 +1,5 @@
 package org.example;
 
-import com.google.common.reflect.TypeToken;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -11,6 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MessagesBot extends TelegramLongPollingBot {
     private List<Update> updateList;
@@ -104,11 +104,11 @@ public class MessagesBot extends TelegramLongPollingBot {
             } else if (s.contains("numbers")) {
                 if (numbersApi(update, message, s)) return;
             } else if (s.contains("cats facts")) {
-                message.setText(new JsonHandler<>(Cat.class).readJson(Cat.PATH));
+                message.setText(new JsonHandler<>(Cat.class).readJson(Cat.PATH).toString());
                 addHistory(update);
             } else if (s.contains("quotes")) {
-           //     message.setText(QuotesAPI.getQuotes());
-                message.setText(new JsonHandler<>(QuotesAPI.class).readJson("https://rest-quotes-api.onrender.com/api/quotes/random"));
+                //     message.setText(QuotesAPI.getQuotes());
+                message.setText(new JsonHandler<>(QuotesAPI.class).readJson("https://rest-quotes-api.onrender.com/api/quotes/random").toString());
                 addHistory(update);
             } else if (s.contains("joke")) {
                 if (jokeApi(update, message, chatId, s)) return;
@@ -128,7 +128,7 @@ public class MessagesBot extends TelegramLongPollingBot {
         } else if (s.contains("numbers-type-")) {
             String type = s.replace("numbers-type-", "");
             //message.setText(NumberInfoAPI.getNumber(type));
-            message.setText(new JsonHandler<>(NumberInfoAPI.class).readJson("http://numbersapi.com/random/"+type+"?json"));
+            message.setText(new JsonHandler<>(NumberInfoAPI.class).readJson("http://numbersapi.com/random/" + type + "?json").toString());
 
             addHistory(update);
         }
@@ -146,11 +146,10 @@ public class MessagesBot extends TelegramLongPollingBot {
         } else if (s.contains("universities-country-")) {
             String country = s.replace("universities-country-", "");
             country = country.replace(" ", "+");
-           // message.setText(UniversitiesAPI.getUniversities(universitiesUserChoiceNumberList.get(chatId), country));
-
-         //   message.setText(new JsonHandler<>(new TypeToken<List<UniversitiesAPI>>(){}.getType().getClass()).readJson("http://universities.hipolabs.com/search?country=" +country));
-            message.setText(new JsonHandler<>(UniversitiessAPI.class).readJson("http://universities.hipolabs.com/search?country=" +country));
-
+            // message.setText(UniversitiesAPI.getUniversities(universitiesUserChoiceNumberList.get(chatId), country));
+           UniversitiesAPI[] array =new JsonHandler<>(UniversitiesAPI[].class).readJson("http://universities.hipolabs.com/search?country=" + country);
+            List<UniversitiesAPI> lista = List.of(array);
+            message.setText(lista.stream().limit(universitiesUserChoiceNumberList.get(chatId)).toList().toString());
             addHistory(update);
         }
         return false;
@@ -170,11 +169,11 @@ public class MessagesBot extends TelegramLongPollingBot {
             return true;
         } else if (s.contains("joke-amount-")) {
             String amount = s.replace("joke-amount-", "");
-            String path = "https://v2.jokeapi.dev/joke/" + jokeUserChoiceCategories.get(chatId) + "?lang=" + jokeUserChoiceLanguage.get(chatId) + "&amount=" + amount ;
-            if (amount.equals("1")){
-                message.setText(new JsonHandler<>(Joke.class).readJson(path));
-            }else {
-                message.setText(new JsonHandler<>(Jokes.class).readJson(path));
+            String path = "https://v2.jokeapi.dev/joke/" + jokeUserChoiceCategories.get(chatId) + "?lang=" + jokeUserChoiceLanguage.get(chatId) + "&amount=" + amount;
+            if (amount.equals("1")) {
+                message.setText(new JsonHandler<>(Joke.class).readJson(path).toString());
+            } else {
+                message.setText(new JsonHandler<>(Jokes.class).readJson(path).toString());
             }
             addHistory(update);
         }

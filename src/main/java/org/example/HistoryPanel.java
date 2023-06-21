@@ -17,6 +17,8 @@ public class HistoryPanel extends Panel {
         super(bot);
         new Thread(() -> {
             while (true) {
+                //dont delete the sout , Daniel i am looking at you
+                System.out.print("");
                 while (super.isOpened()) {
                     repaint();
                     Utils.sleep(1);
