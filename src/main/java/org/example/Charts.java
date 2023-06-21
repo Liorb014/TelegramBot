@@ -14,7 +14,6 @@ public class Charts extends Panel {
     private String timeData;
     private String requestData;
     private int totalAmountOfRequest;
-    private final int MINUTE = 60;
 
     public Charts(MessagesBot bot) {
         super(bot);
@@ -30,39 +29,15 @@ public class Charts extends Panel {
                 System.out.print("");
                 throughTime();
                 requestAmount();
-                chart.setConfig("      {\n" +
-                        "                  type: 'line',\n" +
-                        "                  data: {\n" +
-                        this.timeData +",\n" +
-                        "                                \n" +
-                        "                    datasets: [\n" +
-                        "                      {\n" +
-                        "                        type: 'line',\n" +
-                        "                        label: 'activities',\n" +
-                        "                        borderColor: 'rgb(54, 162, 235)',\n" +
-                        "                        borderWidth: 2,\n" +
-                        "                        fill: true,\n" +
-                        "                       "+this.requestData+ ",\n" +
-                        "                      },\n" +
-                        "                                 ],\n" +
-                        "                  },\n" +
-                        "                  options: {\n" +
-                        "                    title: {\n" +
-                        "                      display: true,\n" +
-                        "                      text: 'Activities over Time',\n" +
-                        "                    },\n" +
-                        "                  },\n" +
-                        "                }      ");
-
+                setConfig(chart);
                 String path = chart.getUrl();
                 try {
                     icon = new ImageIcon(new URL(path));
-
                 } catch (MalformedURLException e) {
                     throw new RuntimeException(e);
                 }
                 repaint();
-                Utils.sleep(MINUTE);
+                Utils.sleep(60);
             }
         }).start();
         exitButton(this);
@@ -79,17 +54,40 @@ public class Charts extends Panel {
         Date currentDate = new Date();
         this.timeData=this.timeData.replace("]", ",'"+formatter.format(currentDate)+"']");
         this.timeData=  this.timeData.replace(timeData.charAt(9),' ');
-
-        System.out.println(this.timeData);
     }
     private void requestAmount(){
         int temp = getAmountOfRequests();
         this.requestData = this.requestData.replace("]",",'"+(getAmountOfRequests()-totalAmountOfRequest)+"']");
         this.requestData =  this.requestData.replace(this.requestData.charAt(7),' ');
         totalAmountOfRequest=temp;
-        System.out.println(requestData);
     }
     public int getAmountOfRequests() {
         return super.getBot().getUpdateList().size();
+    }
+
+    private void setConfig(QuickChart chart){
+        chart.setConfig("      {\n" +
+                "                  type: 'line',\n" +
+                "                  data: {\n" +
+                this.timeData +",\n" +
+                "                                \n" +
+                "                    datasets: [\n" +
+                "                      {\n" +
+                "                        type: 'line',\n" +
+                "                        label: 'activities',\n" +
+                "                        borderColor: 'rgb(54, 162, 235)',\n" +
+                "                        borderWidth: 2,\n" +
+                "                        fill: true,\n" +
+                "                       "+this.requestData+ ",\n" +
+                "                      },\n" +
+                "                                 ],\n" +
+                "                  },\n" +
+                "                  options: {\n" +
+                "                    title: {\n" +
+                "                      display: true,\n" +
+                "                      text: 'Activities over Time',\n" +
+                "                    },\n" +
+                "                  },\n" +
+                "                }      ");
     }
 }
