@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UniversitiesAPI {
-    //    UniversitiesAPI[] universitiesAPIList= new UniversitiesAPI[30];
     private String name;
     private String country;
     private List<String> domains;
@@ -58,39 +57,5 @@ public class UniversitiesAPI {
             uni += "\n\n";
             return uni;
     }
-
-    public static String getUniversities(int limit, String country) {
-        try {
-            String apiUrl = "http://universities.hipolabs.com/search?country=" + country;
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection = null;
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-                ObjectMapper objectMapper = new ObjectMapper();
-                UniversitiesAPI[] universities = objectMapper.readValue((response.toString()), UniversitiesAPI[].class);
-                String uni = "";
-                for (UniversitiesAPI university : Arrays.stream(universities).limit(limit).collect(Collectors.toList())) {
-                    uni += "University Name: " + university.getName() + "\n";
-                    uni += "Country: " + university.getCountry() + "\n";
-                    uni += "website: " + university.getDomains().get(0);
-                    uni += "\n\n";
-                }
-                return uni;
-            } else return "error";
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
 }
 

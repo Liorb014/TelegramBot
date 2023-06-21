@@ -11,7 +11,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HistoryPanel extends Panel {
-    private JLabel historyText;
+    private final int TITLE_SIZE = 20;
+    private final int TITLE_X = 20;
+    private final int TITLE_Y = 20;
+    private final String TITLE_TEXT = "The last 10 requests: ";
+
+    private final int REQUESTS_SIZE = 13;
+    private final int REQUESTS_X = 152;
+    private final int REQUESTS_Y = 62;
 
     public HistoryPanel(MessagesBot bot) {
         super(bot);
@@ -26,26 +33,15 @@ public class HistoryPanel extends Panel {
             }
         }).start();
         exitButton(this);
-
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setFont(new Font("Ariel" , Font.BOLD ,20));
-        drawString(g, "the last 10 requests: ", 150, 15);
-        g.setFont(new Font("Ariel" , Font.BOLD,13));
-        drawString(g, super.getBot().getHistoryData(), 152, 65);
+        g.setFont(new Font(Panel.ALL_TEXTS_STILE, Font.BOLD, TITLE_SIZE));
+        drawString(g, TITLE_TEXT, TITLE_X, TITLE_Y);
+        g.setFont(new Font(Panel.ALL_TEXTS_STILE, Font.BOLD, REQUESTS_SIZE));
+        drawString(g, super.getBot().getHistoryData(), REQUESTS_X, REQUESTS_Y);
     }
 
-    public String formatUpdate(Update update) {
-        String name = update.getCallbackQuery().getFrom().getFirstName();
-        if (update.getCallbackQuery().getFrom().getLastName() != null) {
-            name += " " + update.getCallbackQuery().getFrom().getLastName();
-        }
-        String userChoose = update.getCallbackQuery().getData();
-        SimpleDateFormat format = new SimpleDateFormat("dd//MM/yy  hh:mm");
-        Date date = new Date();
-        return (name + " , " + userChoose + " , " + format.format(date));
-    }
 }

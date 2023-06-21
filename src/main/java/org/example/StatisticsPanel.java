@@ -68,7 +68,6 @@ public class StatisticsPanel extends Panel {
         }
     }
 
-
     public int getAmountOfRequests() {
         return super.getBot().getUpdateList().size();
     }

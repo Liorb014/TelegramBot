@@ -14,6 +14,7 @@ public class Charts extends Panel {
     private String timeData;
     private String requestData;
     private int totalAmountOfRequest;
+    private final int MINUTE = 60;
 
     public Charts(MessagesBot bot) {
         super(bot);
@@ -29,9 +30,6 @@ public class Charts extends Panel {
                 System.out.print("");
                 throughTime();
                 requestAmount();
-
-//                while (super.isOpened()) {
-
                 chart.setConfig("      {\n" +
                         "                  type: 'line',\n" +
                         "                  data: {\n" +
@@ -64,7 +62,7 @@ public class Charts extends Panel {
                     throw new RuntimeException(e);
                 }
                 repaint();
-                Utils.sleep(60);
+                Utils.sleep(MINUTE);
             }
         }).start();
         exitButton(this);
@@ -73,10 +71,7 @@ public class Charts extends Panel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (icon!= null){
-
             g.drawImage(icon.getImage(), 0, 0, this);
-        }else System.out.println("null");
     }
 
     private void throughTime() {

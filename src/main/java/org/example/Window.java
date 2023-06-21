@@ -9,12 +9,13 @@ public class Window extends JFrame {
     private static HistoryPanel usersHistory;
     private static StatisticsPanel statistics;
     private static Charts charts;
+    private final String LOGO_IMAGE_PATH="src/main/java/Icons/ProgramLogo.jpg";
 
 
     public Window() {
         this.bot = Main.activateTelegramBot();
         this.setTitle("bot manager");
-        this.setIconImage(new ImageIcon("src/main/java/Icons/ProgramLogo.jpg").getImage());
+        this.setIconImage(new ImageIcon(LOGO_IMAGE_PATH).getImage());
         this.setSize(Panel.WINDOW_SIZE, Panel.WINDOW_SIZE);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);

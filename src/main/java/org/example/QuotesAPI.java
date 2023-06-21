@@ -1,14 +1,11 @@
 package org.example;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.gson.Gson;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.GetRequest;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QuotesAPI {
+    public static final String PATH="https://rest-quotes-api.onrender.com/api/quotes/random";
     private String quoteAuthor;
     private String quoteText;
 
@@ -33,21 +30,6 @@ public class QuotesAPI {
         return
                 "author: " + quoteAuthor + '\n' +
                 "quote: " + quoteText ;
-    }
-
-    public static String getQuotes() {
-        GetRequest getRequest = Unirest.get("http://rest-quotes-api.onrender.com/api/quotes/random");
-     //   https://rest-quotes-api.onrender.com/api/quotes/random
-        HttpResponse<String> response;
-        try {
-            response = getRequest.asString();
-        } catch (UnirestException e) {
-            throw new RuntimeException(e);
-        }
-        String json = response.getBody();
-        QuotesAPI quotes;
-        quotes = new Gson().fromJson(json, QuotesAPI.class);
-        return quotes.toString();
     }
 }
 

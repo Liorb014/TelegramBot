@@ -9,13 +9,24 @@ public abstract class Panel extends JPanel {
 
     public static final int WINDOW_SIZE = 500;
 
+    public static final int EXIT_BUTTON_SIZE = 50;
+    public static final int EXIT_BUTTON_X = 0;
+    public static final int EXIT_BUTTON_Y = 0;
+    public static final String EXIT_BUTTON_TEXT = "X";
+    public static final int EXIT_BUTTON_TEXT_SIZE = 12;
+    public static final String ALL_TEXTS_STILE = "Ariel";
+
+    private final int BG_RED_AMOUNT = 111;
+    private final int BG_GREEN_AMOUNT = 211;
+    private final int BG_BLUE_AMOUNT = 255;
+
     public Panel(MessagesBot bot){
         this.isOpened = false;
         this.bot= bot;
         this.setSize(WINDOW_SIZE, WINDOW_SIZE);
         this.setLayout(null);
         this.setOpaque(true);
-        this.setBackground(Color.cyan);
+        this.setBackground(new Color(BG_RED_AMOUNT,BG_GREEN_AMOUNT,BG_BLUE_AMOUNT));
         this.setDoubleBuffered(true);
         this.setVisible(false);
     }
@@ -38,9 +49,9 @@ public abstract class Panel extends JPanel {
     }
 
     public static JButton exitButton(Panel panel) {
-        JButton exitButton = new JButton("X");
-        exitButton.setFont(new Font("Ariel", Font.BOLD, 12));
-        exitButton.setBounds(0, 0, 50, 50);
+        JButton exitButton = new JButton(EXIT_BUTTON_TEXT);
+        exitButton.setFont(new Font(ALL_TEXTS_STILE, Font.BOLD, EXIT_BUTTON_TEXT_SIZE));
+        exitButton.setBounds(EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_SIZE, EXIT_BUTTON_SIZE);
         exitButton.setVisible(true);
         panel.add(exitButton);
         exitButton.addActionListener((event) -> {
