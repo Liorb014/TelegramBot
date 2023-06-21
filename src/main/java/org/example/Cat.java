@@ -34,22 +34,4 @@ public class Cat {
         return fact;
     }
 
-    public String getS() {
-        return fact;
-    }
-
-    public static String getCatFact() {
-        GetRequest getRequest = Unirest.get(PATH);
-        HttpResponse<String> response;
-        try {
-            response = getRequest.asString();
-        } catch (UnirestException e) {
-            throw new RuntimeException(e);
-        }
-        String json = response.getBody();
-        Cat cat;
-
-        cat = new Gson().fromJson(json, Cat.class);
-        return cat.fact;
-    }
 }

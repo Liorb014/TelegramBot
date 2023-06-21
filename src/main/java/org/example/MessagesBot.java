@@ -10,7 +10,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MessagesBot extends TelegramLongPollingBot {
     private List<Update> updateList;
@@ -94,7 +93,6 @@ public class MessagesBot extends TelegramLongPollingBot {
                 message.setText("say \" hi\" to start");
             }
         } else if (update.hasCallbackQuery()) {
-            //  addHistory(update);
             long chatId = update.getCallbackQuery().getFrom().getId();
             message.setChatId(chatId);
             String s = update.getCallbackQuery().getData();
@@ -127,9 +125,7 @@ public class MessagesBot extends TelegramLongPollingBot {
             return true;
         } else if (s.contains("numbers-type-")) {
             String type = s.replace("numbers-type-", "");
-            //message.setText(NumberInfoAPI.getNumber(type));
             message.setText(new JsonHandler<>(NumberInfoAPI.class).readJson("http://numbersapi.com/random/" + type + "?json").toString());
-
             addHistory(update);
         }
         return false;
@@ -146,7 +142,6 @@ public class MessagesBot extends TelegramLongPollingBot {
         } else if (s.contains("universities-country-")) {
             String country = s.replace("universities-country-", "");
             country = country.replace(" ", "+");
-            // message.setText(UniversitiesAPI.getUniversities(universitiesUserChoiceNumberList.get(chatId), country));
            UniversitiesAPI[] array =new JsonHandler<>(UniversitiesAPI[].class).readJson("http://universities.hipolabs.com/search?country=" + country);
             List<UniversitiesAPI> lista = List.of(array);
             message.setText(lista.stream().limit(universitiesUserChoiceNumberList.get(chatId)).toList().toString());
@@ -237,11 +232,8 @@ public class MessagesBot extends TelegramLongPollingBot {
         return updateList;
     }
 
-    public String getHistoryData() {
-        String result = "";
-        for (String data : this.historyData) {
-            result += data + "\n\n";
-        }
-        return result;
+    public List<String> getHistoryData() {
+        return historyData;
     }
+
 }

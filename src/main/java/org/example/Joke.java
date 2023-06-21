@@ -94,11 +94,6 @@ public class Joke {
         return joke;
     }
 
-    public String getFullJoke() {
-        if (type.equals("twopart")) {
-            return this.setup + "\n\n" + this.delivery;
-        } else return joke;
-    }
 
     @Override
     public String toString() {
@@ -107,67 +102,6 @@ public class Joke {
         } else return joke;
     }
 
-    public static String getJokeText(String type, String lang, String amount) {
-        String path = "https://v2.jokeapi.dev/joke/" + type + "?lang=" + lang + "&amount=" + amount;
-        System.out.println(path);
-        GetRequest getRequest = Unirest.get("https://v2.jokeapi.dev/joke/" + type + "?lang=" + lang + "&amount=" + amount);
-        HttpResponse<String> response;
-        try {
-            response = getRequest.asString();
-        } catch (UnirestException e) {
-            throw new RuntimeException(e);
-        }
-        String json = response.getBody();
 
-        System.out.println("a");
-        ObjectMapper objectMapper = new ObjectMapper();
-        Joke[] jokes;
-        try {
-            jokes= objectMapper.readValue(json, Joke[].class);
-
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("b");
-        String s = "";
-        for (Joke p : jokes
-        ) {
-            s += p.getFullJoke() + "\n";
-        }
-        System.out.println(s);
-        return s;
-    }
-
-    public static  String nnn(String type, String lang, String amount) {
-        try {
-            String apiUrl =  "https://v2.jokeapi.dev/joke/" + type + "?lang=" + lang + "&amount=" + amount;
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection;
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-                ObjectMapper objectMapper = new ObjectMapper();
-                Jokes jokes = objectMapper.readValue((response.toString()), Jokes.class);
-
-                StringBuilder s = new StringBuilder();
-                for (Joke p : jokes.getJokes()
-                ) {
-                    s.append(p.getFullJoke()).append("\n\n--------------------------------------\n\n");
-                }
-
-                return s.toString();
-            }else return "error";
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
 

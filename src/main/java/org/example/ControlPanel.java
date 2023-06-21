@@ -54,12 +54,7 @@ public class ControlPanel extends Panel {
 
     public ControlPanel(MessagesBot bot) {
         super(bot);
-        // this.bot = bot;
         this.selectedCheckBox = 0;
-//        this.setSize(Utils.WINDOW_SIZE, Utils.WINDOW_SIZE);
-//        this.setBackground(new Color(BG_RED_AMOUNT, BG_GREEN_AMOUNT, BG_BLUE_AMOUNT));
-//        this.setLayout(null);
-//        this.setDoubleBuffered(true);
         this.checkboxList = new ArrayList<>();
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(0), this.JOKES, UserChoice.JOKE));
         this.checkboxList.add(createRadioButton(CHECK_BOXES_LINE_X, keepCheckBoxInSpace(1), this.NUMBERS, UserChoice.NUMBER));
@@ -131,11 +126,6 @@ public class ControlPanel extends Panel {
         g.setFont(new Font("Arial", Font.BOLD, this.SUBTEXT_SIZE));
         drawString(g, this.OTHER_OPTIONS, this.OTHER_OPTION_X, this.OTHER_OPTION_Y);
     }
-
-//    private void drawString(Graphics g, String text, int x, int y) {
-//        for (String line : text.split("\n"))
-//            g.drawString(line, x, y += g.getFontMetrics().getHeight());
-//    }
 
     private int keepCheckBoxInSpace(int index) {
         return this.OPTIONS_START_POINT_Y + this.CHECK_BOXES_MARGIN * index;
