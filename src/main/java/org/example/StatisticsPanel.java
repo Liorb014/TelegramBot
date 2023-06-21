@@ -48,4 +48,66 @@ public class StatisticsPanel extends Panel {
         drawString(graphics, "The most activate user is: " + this.theMostActivateUser, X_LINE_OF_TEXT, SPACE_BETWEEN_LINES * 3);
         drawString(graphics, "The most popular activity is: " + this.theMostPopularActivity, X_LINE_OF_TEXT, SPACE_BETWEEN_LINES * 4);
     }
+
+
+    private String getTheMostPopularActivity() {
+        if (super.getBot().getUpdateList().stream().noneMatch(Update::hasCallbackQuery)) {
+            return "null";
+        } else {
+            Map<String, Long> temp = super.getBot().getUpdateList().stream()
+                    .filter(Update::hasCallbackQuery)
+                    .map(update -> update.getCallbackQuery().getData())
+                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+            List<String> topActivities = temp.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                    .limit(1).
+                    map(Map.Entry::getKey).toList();
+            return topActivities.get(0);
+        }
+    }
+
+
+    public int getAmountOfRequests() {
+        return super.getBot().getUpdateList().size();
+    }
+
+    public int getAmountOfUniqUsers() {
+        return (int) super.getBot().getUpdateList().stream()
+                .filter(Update::hasMessage)
+                .map(update -> update.getMessage().getFrom().getId())
+                .distinct()
+                .count();
+    }
+
+    public String getTheMostActivateUser() {
+        if (super.getBot().getUpdateList().stream().noneMatch(Update::hasCallbackQuery)) {
+            return "null";
+        } else {
+            Map<Long, Long> temp = super.getBot().getUpdateList()
+                    .stream()
+                    .filter(Update::hasCallbackQuery)
+                    .map(update -> update.getCallbackQuery().getFrom().getId())
+                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+            List<Long> chatId = temp.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                    .limit(1).
+                    map(Map.Entry::getKey).toList();
+            return getUserByChatId(chatId.get(0)).getFirstName();
+        }
+    }
+
+    private User getUserByChatId(long userID) {
+        return super.getBot().getUpdateList().stream()
+                .filter(Update::hasMessage)
+                .filter(update -> update.getMessage().getFrom().getId().equals(userID))
+                .map(update -> update.getMessage().getFrom())
+                .findFirst()
+                .orElse(null);
+    }
+
+
 }

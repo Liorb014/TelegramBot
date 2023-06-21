@@ -16,7 +16,7 @@ import java.net.URL;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Joke {
-    private boolean error;
+  //  private boolean error;
     private String category;
     private String type;
     private String joke;
@@ -38,9 +38,7 @@ public class Joke {
         return type;
     }
 
-    public boolean isError() {
-        return error;
-    }
+
 
     public void setType(String type) {
         this.type = type;
@@ -70,9 +68,7 @@ public class Joke {
         this.id = id;
     }
 
-    public void setError(boolean error) {
-        this.error = error;
-    }
+
 
     public boolean isSafe() {
         return safe;
@@ -106,18 +102,16 @@ public class Joke {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("JokesApi{");
-        //   sb.append("error=").append(error);
-        sb.append(", category='").append(category).append('\'');
-        sb.append(", type='").append(type).append('\'');
-        sb.append(", joke='").append(joke).append('\'');
-        sb.append(", setup='").append(setup).append('\'');
-        sb.append(", delivery='").append(delivery).append('\'');
-        sb.append(", id=").append(id);
-        sb.append(", safe=").append(safe);
-        sb.append(", lang='").append(lang).append('\'');
-        sb.append('}');
-        return sb.toString();
+        String sb = "JokesApi{" + ", category='" + category + '\'' +
+                ", type='" + type + '\'' +
+                ", joke='" + joke + '\'' +
+                ", setup='" + setup + '\'' +
+                ", delivery='" + delivery + '\'' +
+                ", id=" + id +
+                ", safe=" + safe +
+                ", lang='" + lang + '\'' +
+                '}';
+        return sb;
     }
 
     public static String getJokeText(String type, String lang, String amount) {
@@ -155,7 +149,7 @@ public class Joke {
         try {
             String apiUrl =  "https://v2.jokeapi.dev/joke/" + type + "?lang=" + lang + "&amount=" + amount;
             URL url = new URL(apiUrl);
-            HttpURLConnection connection = null;
+            HttpURLConnection connection;
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             int responseCode = connection.getResponseCode();
@@ -168,16 +162,15 @@ public class Joke {
                 }
                 reader.close();
                 ObjectMapper objectMapper = new ObjectMapper();
-                Joke[] jokes = objectMapper.readValue((response.toString()), Joke[].class);
-                System.out.println("aa");
+                Jokes jokes = objectMapper.readValue((response.toString()), Jokes.class);
 
-                String s = "";
-                for (Joke p : jokes
+                StringBuilder s = new StringBuilder();
+                for (Joke p : jokes.getJokes()
                 ) {
-                    s += p.getFullJoke() + "\n";
+                    s.append(p.getFullJoke()).append("\n\n--------------------------------------\n\n");
                 }
-                System.out.println(s);
-                return s;
+
+                return s.toString();
             }else return "error";
         } catch (IOException e) {
             throw new RuntimeException(e);
