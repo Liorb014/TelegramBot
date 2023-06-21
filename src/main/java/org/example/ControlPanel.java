@@ -23,17 +23,17 @@ public class ControlPanel extends Panel {
     private final int OPTIONS_START_POINT_Y = 120;
     private final int OTHER_OPTION_BOXES_MARGIN = 100;
     private final int OTHER_OPTION_X = 280;
-    private final int OTHER_OPTION_Y = 95;
+    private final int OTHER_OPTION_Y = 85;
 
     private final int SUBTEXT_SIZE = 12;
     private final int INSTRUCTION_X = 68;
     private final int INSTRUCTION_Y = 78;
 
-    private final int TITLE_SIZE = 12;
+    private final int TITLE_SIZE = 22;
     private final int TITLE_X = 50;
     private final int TITLE_Y = 20;
 
-    private final int BUTTONS_WIDTH = 110;
+    private final int BUTTONS_WIDTH = 130;
     private final int BUTTONS_HEIGHT = 30;
 
     private final String TITLE = "welcome to telegram bot management";
@@ -45,9 +45,9 @@ public class ControlPanel extends Panel {
     private final String QUOTES = "quotes";
     private final String CATS_FACTS = "cats facts";
 
-    private final String USER_HISTORY = "cats facts";
-    private final String STATISTICS = "cats facts";
-    private final String GRAPH = "cats facts";
+    private final String USER_HISTORY = "Users History";
+    private final String STATISTICS = "Statistics";
+    private final String GRAPH = "Activity Graph ";
 
     public ControlPanel(MessagesBot bot) {
         super(bot);
