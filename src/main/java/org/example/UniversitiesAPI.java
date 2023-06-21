@@ -13,12 +13,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UniversitiesAPI {
+   // UniversitiesAPI[] universitiesAPIList= new UniversitiesAPI[];
     private String name;
     private String country;
     private List<String> domains;
@@ -87,4 +89,7 @@ public class UniversitiesAPI {
             throw new RuntimeException(e);
         }
     }
+
+
 }
+

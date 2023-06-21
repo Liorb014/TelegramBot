@@ -42,7 +42,7 @@ public class JsonHandler<T> {
 //    }
 //
 
-    public T readJson(String path) {
+    public String readJson(String path) {
         try {
             URL url = new URL(path);
             HttpURLConnection connection;
@@ -58,10 +58,9 @@ public class JsonHandler<T> {
                 }
                 reader.close();
                 ObjectMapper objectMapper = new ObjectMapper();
-                System.out.println("aa");
-             T item =objectMapper.readValue((response.toString()), this.TYPE);
-                System.out.println("asa");
-                return item;
+                T item = objectMapper.readValue((response.toString()), this.TYPE);
+
+                return item.toString();
             } else return null;
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -31,4 +31,14 @@ public class Jokes {
     public void setJokes(List<Joke> jokes) {
         this.jokes = jokes;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        for (Joke p : this.jokes
+        ) {
+            s.append(p.toString()+"\n\n--------------------------------------\n\n");
+        }
+        return s.toString();
+    }
 }

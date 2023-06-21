@@ -31,10 +31,7 @@ public class Cat {
 
     @Override
     public String toString() {
-        return "RagdollFact{" +
-                "fact='" + fact + '\'' +
-                ", length=" + length +
-                '}';
+        return fact;
     }
 
     public String getS() {

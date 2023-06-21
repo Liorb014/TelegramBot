@@ -22,9 +22,7 @@ public class NumberInfoAPI {
 
     @Override
     public String toString() {
-        return "NumberInfoAPI{" +
-                "number='" + text + '\'' +
-                '}';
+        return text;
     }
 
     public static String getNumber(String type) {

@@ -102,16 +102,9 @@ public class Joke {
 
     @Override
     public String toString() {
-        String sb = "JokesApi{" + ", category='" + category + '\'' +
-                ", type='" + type + '\'' +
-                ", joke='" + joke + '\'' +
-                ", setup='" + setup + '\'' +
-                ", delivery='" + delivery + '\'' +
-                ", id=" + id +
-                ", safe=" + safe +
-                ", lang='" + lang + '\'' +
-                '}';
-        return sb;
+        if (type.equals("twopart")) {
+            return this.setup + "\n\n" + this.delivery;
+        } else return joke;
     }
 
     public static String getJokeText(String type, String lang, String amount) {

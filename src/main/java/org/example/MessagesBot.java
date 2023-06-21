@@ -1,5 +1,6 @@
 package org.example;
 
+import com.google.common.reflect.TypeToken;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -103,13 +104,11 @@ public class MessagesBot extends TelegramLongPollingBot {
             } else if (s.contains("numbers")) {
                 if (numbersApi(update, message, s)) return;
             } else if (s.contains("cats facts")) {
-                message.setText(new JsonHandler<>(Cat.class).readJson(Cat.PATH).getS());
+                message.setText(new JsonHandler<>(Cat.class).readJson(Cat.PATH));
                 addHistory(update);
             } else if (s.contains("quotes")) {
            //     message.setText(QuotesAPI.getQuotes());
-                System.out.println("Aaa");
-                message.setText(new JsonHandler<>(QuotesAPI.class).readJson("https://rest-quotes-api.onrender.com/api/quotes/random").toString());
-                System.out.println("bb");
+                message.setText(new JsonHandler<>(QuotesAPI.class).readJson("https://rest-quotes-api.onrender.com/api/quotes/random"));
                 addHistory(update);
             } else if (s.contains("joke")) {
                 if (jokeApi(update, message, chatId, s)) return;
@@ -128,7 +127,9 @@ public class MessagesBot extends TelegramLongPollingBot {
             return true;
         } else if (s.contains("numbers-type-")) {
             String type = s.replace("numbers-type-", "");
-            message.setText(NumberInfoAPI.getNumber(type));
+            //message.setText(NumberInfoAPI.getNumber(type));
+            message.setText(new JsonHandler<>(NumberInfoAPI.class).readJson("http://numbersapi.com/random/"+type+"?json"));
+
             addHistory(update);
         }
         return false;
@@ -145,7 +146,11 @@ public class MessagesBot extends TelegramLongPollingBot {
         } else if (s.contains("universities-country-")) {
             String country = s.replace("universities-country-", "");
             country = country.replace(" ", "+");
-            message.setText(UniversitiesAPI.getUniversities(universitiesUserChoiceNumberList.get(chatId), country));
+           // message.setText(UniversitiesAPI.getUniversities(universitiesUserChoiceNumberList.get(chatId), country));
+
+         //   message.setText(new JsonHandler<>(new TypeToken<List<UniversitiesAPI>>(){}.getType().getClass()).readJson("http://universities.hipolabs.com/search?country=" +country));
+            message.setText(new JsonHandler<>(UniversitiessAPI.class).readJson("http://universities.hipolabs.com/search?country=" +country));
+
             addHistory(update);
         }
         return false;
@@ -164,7 +169,13 @@ public class MessagesBot extends TelegramLongPollingBot {
             editQueryMessage(update, "choose amount of jokes  : ", makeKeyboard(JOKES_AMOUNT, "joke-amount-"));
             return true;
         } else if (s.contains("joke-amount-")) {
-            message.setText(Joke.nnn(jokeUserChoiceCategories.get(chatId), jokeUserChoiceLanguage.get(chatId), s.replace("joke-amount-", "")));
+            String amount = s.replace("joke-amount-", "");
+            String path = "https://v2.jokeapi.dev/joke/" + jokeUserChoiceCategories.get(chatId) + "?lang=" + jokeUserChoiceLanguage.get(chatId) + "&amount=" + amount ;
+            if (amount.equals("1")){
+                message.setText(new JsonHandler<>(Joke.class).readJson(path));
+            }else {
+                message.setText(new JsonHandler<>(Jokes.class).readJson(path));
+            }
             addHistory(update);
         }
         return false;
