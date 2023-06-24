@@ -32,6 +32,7 @@ public class MessagesBot extends TelegramLongPollingBot {
 
     private final int MAX_HISTORY_DATA = 10;
     private final int MAX_BUTTONS_IN_RAW = 5;
+    private final int MAX_BUTTONS_IN_SUBMENU_RAW = 3;
 
     private final String JOKE = "joke";
     private final String NUMBERS = "numbers";
@@ -137,7 +138,7 @@ public class MessagesBot extends TelegramLongPollingBot {
     private void instructions(Update update, SendMessage message) {
         if (update.getMessage().isCommand()) {
             switch (update.getMessage().getText()) {
-                case "/start" -> System.out.println("start");
+                case "/start" -> System.out.println(START_COMMAND);
                 default -> message.setText("Unknown command");
             }
         }
@@ -145,7 +146,7 @@ public class MessagesBot extends TelegramLongPollingBot {
 
     private boolean numbersApi(Update update, SendMessage message, String userChoice) {
         if (userChoice.equals(NUMBERS)) {
-            editQueryMessage(update, "choose type of fact  : ", makeKeyboard(NUMBERS_API_TYPE_LIST, "numbers-type-",3));
+            editQueryMessage(update, "choose type of fact  : ", makeKeyboard(NUMBERS_API_TYPE_LIST, "numbers-type-",MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("numbers-type-")) {
             String type = userChoice.replace("numbers-type-", "");
@@ -162,7 +163,7 @@ public class MessagesBot extends TelegramLongPollingBot {
             return true;
         } else if (userChoice.contains("universities-number-")) {
             universitiesUserChoiceNumberList.put(chatId, Integer.valueOf(userChoice.replace("universities-number-", "")));
-            editQueryMessage(update, "choose country institutions origin  : ", makeKeyboard(UNIVERSITIES_API_COUNTRIES_LIST, "universities-country-",3));
+            editQueryMessage(update, "choose country institutions origin  : ", makeKeyboard(UNIVERSITIES_API_COUNTRIES_LIST, "universities-country-",MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("universities-country-")) {
             String country = userChoice.replace("universities-country-", "");
@@ -177,15 +178,15 @@ public class MessagesBot extends TelegramLongPollingBot {
 
     private boolean jokeApi(Update update, SendMessage message, long chatId, String userChoice) {
         if (userChoice.equals(JOKE)) {
-            editQueryMessage(update, "choose type of joke  : ", makeKeyboard(JOKES_CATEGORIES, "joke-categories-",3));
+            editQueryMessage(update, "choose type of joke  : ", makeKeyboard(JOKES_CATEGORIES, "joke-categories-",MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("joke-categories-")) {
             jokeUserChoiceCategories.put(chatId, userChoice.replace("joke-categories-", ""));
-            editQueryMessage(update, "choose language of joke  : ", makeKeyboard(JOKES_LANGUAGE, "joke-language-",3));
+            editQueryMessage(update, "choose language of joke  : ", makeKeyboard(JOKES_LANGUAGE, "joke-language-",MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("joke-language-")) {
             jokeUserChoiceLanguage.put(chatId, userChoice.replace("joke-language-", ""));
-            editQueryMessage(update, "choose amount of jokes  : ", makeKeyboard(JOKES_AMOUNT, "joke-amount-",3));
+            editQueryMessage(update, "choose amount of jokes  : ", makeKeyboard(JOKES_AMOUNT, "joke-amount-",MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("joke-amount-")) {
             String amount = userChoice.replace("joke-amount-", "");
