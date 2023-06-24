@@ -12,8 +12,9 @@ public abstract class Panel extends JPanel {
     public static final int EXIT_BUTTON_SIZE = 50;
     public static final int EXIT_BUTTON_X = 0;
     public static final int EXIT_BUTTON_Y = 0;
-    public static final String EXIT_BUTTON_TEXT = "X";
     public static final int EXIT_BUTTON_TEXT_SIZE = 12;
+    public static final String EXIT_BUTTON_TEXT = "X";
+
     public static final String ALL_TEXTS_STILE = "Ariel";
 
     private final int BG_RED_AMOUNT = 111;
