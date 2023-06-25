@@ -8,7 +8,6 @@ public class HistoryPanel extends Panel {
         super(bot);
         new Thread(() -> {
             while (true) {
-                //don't delete the sout , Daniel I am looking at you
                 System.out.print("");
                 while (super.isOpened()) {
                     repaint();

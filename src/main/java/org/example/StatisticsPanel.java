@@ -22,7 +22,6 @@ public class StatisticsPanel extends Panel {
         super(bot);
         new Thread(() -> {
             while (true) {
-//dont delete the sout , Daniel i am looking at you
                 System.out.print("");
                 if (super.isOpened()) {
                     this.amountOfRequests = getAmountOfRequests();
