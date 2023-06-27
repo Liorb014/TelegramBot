@@ -8,25 +8,29 @@ public class HistoryPanel extends Panel {
         super(bot);
         new Thread(() -> {
             while (true) {
-                System.out.print("");
+                synchronized (this) {
                 while (super.isOpened()) {
-                    repaint();
-                    Utils.sleep(1);
+             //           while (this.isVisible()) {
+                        repaint();
+                        Utils.sleep(1);
+                    }
                 }
             }
         }).start();
         exitButton(this);
 
     }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setFont(new Font("Ariel" , Font.BOLD ,20));
+        g.setFont(new Font("Ariel", Font.BOLD, 20));
         drawString(g, "the last 10 requests: ", 150, 15);
-        g.setFont(new Font("Ariel" , Font.BOLD,13));
+        g.setFont(new Font("Ariel", Font.BOLD, 13));
         drawString(g, this.getHistoryData(), 152, 65);
     }
-    public String getHistoryData() {
+
+    private String getHistoryData() {
         StringBuilder result = new StringBuilder();
         for (String data : super.getBot().getHistoryData()) {
             result.append(data).append("\n\n");

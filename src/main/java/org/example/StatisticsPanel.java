@@ -22,14 +22,15 @@ public class StatisticsPanel extends Panel {
         super(bot);
         new Thread(() -> {
             while (true) {
-                System.out.print("");
-                if (super.isOpened()) {
-                    this.amountOfRequests = getAmountOfRequests();
-                    this.amountOfUniqUsers = getAmountOfUniqUsers();
-                    this.theMostActivateUser = getTheMostActivateUser();
-                    this.theMostPopularActivity = getTheMostPopularActivity();
-                    repaint();
-                    Utils.sleep(1);
+                synchronized (this) {
+                    if (super.isOpened()) {
+                        this.amountOfRequests = getAmountOfRequests();
+                        this.amountOfUniqUsers = getAmountOfUniqUsers();
+                        this.theMostActivateUser = getTheMostActivateUser();
+                        this.theMostPopularActivity = getTheMostPopularActivity();
+                        repaint();
+                        Utils.sleep(1);
+                    }
                 }
             }
         }).start();

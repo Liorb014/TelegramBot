@@ -1,7 +1,6 @@
 package org.example;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Window extends JFrame {
     private MessagesBot bot;
@@ -57,7 +56,7 @@ public class Window extends JFrame {
         return statistics;
     }
 
-    public static Charts getChars() {
+    public static Charts getCharts() {
         return charts;
     }
 

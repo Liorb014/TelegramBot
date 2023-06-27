@@ -6,36 +6,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ControlPanel extends Panel {
-
     private List<JCheckBox> checkboxList;
     private Integer selectedCheckBox;
     private JButton userHistory;
     private JButton statistics;
     private JButton showGraph;
-
     private final int MAX_ALLOWED_CHOICES = 3;
-
     private final int CHECK_BOXES_MARGIN = 60;
     private final int CHECK_BOXES_LINE_X = 100;
     private final int CHECKBOX_WIDTH = 150;
     private final int CHECKBOX_HEIGHT = 20;
-
     private final int OPTIONS_START_POINT_Y = 120;
     private final int OTHER_OPTION_BOXES_MARGIN = 100;
     private final int OTHER_OPTION_X = 280;
     private final int OTHER_OPTION_Y = 85;
-
     private final int SUBTEXT_SIZE = 12;
     private final int INSTRUCTION_X = 68;
     private final int INSTRUCTION_Y = 78;
-
     private final int TITLE_SIZE = 22;
     private final int TITLE_X = 50;
     private final int TITLE_Y = 20;
-
     private final int BUTTONS_WIDTH = 130;
     private final int BUTTONS_HEIGHT = 30;
-
     private final String TITLE = "welcome to telegram bot management";
     private final String INSTRUCTIONS = "please choose your desire \n   API to use in your bot: ";
     private final String OTHER_OPTIONS = "other options: ";
@@ -44,7 +36,6 @@ public class ControlPanel extends Panel {
     private final String NUMBERS = "numbers";
     private final String QUOTES = "quotes";
     private final String CATS_FACTS = "cats facts";
-
     private final String USER_HISTORY = "Users History";
     private final String STATISTICS = "Statistics";
     private final String GRAPH = "Activity Graph ";
@@ -63,13 +54,13 @@ public class ControlPanel extends Panel {
         }
 
         this.userHistory = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(0), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, USER_HISTORY);
-        this.userHistory.addActionListener((e) -> {Window.changePanel(Window.getUsersHistory(), this);});
+        this.userHistory.addActionListener((e) -> Window.changePanel(Window.getUsersHistory(), this));
 
         this.statistics = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(1), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, STATISTICS);
-        this.statistics.addActionListener((e) -> {Window.changePanel(Window.getStatistics(), this);});
+        this.statistics.addActionListener((e) -> Window.changePanel(Window.getStatistics(), this));
 
         this.showGraph = createOptionButton(this.OTHER_OPTION_X, keepOtherButtonsInSpace(2), this.BUTTONS_WIDTH, this.BUTTONS_HEIGHT, GRAPH);
-        this.showGraph.addActionListener((e) -> {Window.changePanel(Window.getChars(), this);});
+        this.showGraph.addActionListener((e) -> Window.changePanel(Window.getCharts(), this));
         super.setOpened(true);
         this.setVisible(true);
     }
@@ -88,9 +79,7 @@ public class ControlPanel extends Panel {
         jCheckBox.setBorderPainted(false);
         jCheckBox.setBounds(x, y, CHECKBOX_WIDTH, CHECKBOX_HEIGHT);
         jCheckBox.setBackground(null);
-        jCheckBox.addActionListener((event) -> {
-            checkIfManagerOptionsIsUpToThree(jCheckBox,userSelection);
-        });
+        jCheckBox.addActionListener((event) -> checkIfManagerOptionsIsUpToThree(jCheckBox,userSelection));
         return jCheckBox;
     }
 

@@ -28,18 +28,19 @@ public class Charts extends Panel {
         chart.setBackgroundColor("white");
         new Thread(() -> {
             while (true) {
-                System.out.print("");
-                throughTime();
-                requestAmount();
-                setConfig(chart);
-                String path = chart.getUrl();
-                try {
-                    icon = new ImageIcon(new URL(path));
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
+                synchronized (this) {
+                    throughTime();
+                    requestAmount();
+                    setConfig(chart);
+                    String path = chart.getUrl();
+                    try {
+                        icon = new ImageIcon(new URL(path));
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    repaint();
+                    Utils.sleep(60);
                 }
-                repaint();
-                Utils.sleep(60);
             }
         }).start();
         exitButton(this);
@@ -65,7 +66,7 @@ public class Charts extends Panel {
         totalAmountOfRequest = temp;
     }
 
-    public int getAmountOfRequests() {
+    private int getAmountOfRequests() {
         return super.getBot().getUpdateList().size();
     }
 

@@ -1,18 +1,6 @@
 package org.example;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.GetRequest;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Joke {
@@ -36,8 +24,6 @@ public class Joke {
     public String getType() {
         return type;
     }
-
-
 
     public void setType(String type) {
         this.type = type;
@@ -67,8 +53,6 @@ public class Joke {
         this.id = id;
     }
 
-
-
     public boolean isSafe() {
         return safe;
     }
@@ -93,11 +77,6 @@ public class Joke {
         return joke;
     }
 
-    public String getFullJoke() {
-        if (type.equals("twopart")) {
-            return this.setup + "\n\n" + this.delivery;
-        } else return joke;
-    }
 
     @Override
     public String toString() {

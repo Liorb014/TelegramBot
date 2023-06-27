@@ -2,6 +2,7 @@ package org.example;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -21,7 +22,6 @@ public class MessagesBot extends TelegramLongPollingBot {
     private List<InlineKeyboardButton> apiButtons;
     private Map<UserChoice, InlineKeyboardButton> buttonMap;
     private List<InlineKeyboardButton> activeApiButtons;
-
     private final List<String> API_NAMES_LIST = List.of("joke", "numbers", "cats facts", "quotes", "universities");
     private final List<String> JOKES_CATEGORIES = List.of("any", "Programming", "Miscellaneous", "Dark", "Pun", "Spooky", "Christmas");
     private final List<String> JOKES_LANGUAGE = List.of("cs", "de", "en", "es", "fr", "pt");
@@ -29,11 +29,9 @@ public class MessagesBot extends TelegramLongPollingBot {
     private final List<String> UNIVERSITIES_API_COUNTRIES_LIST = List.of("israel", "india", "united states", "spain", "japan", "china");
     private final List<String> UNIVERSITIES_API_NUMBER_LIST = List.of("1", "2", "3", "4", "5", "10", "15", "20", "25", "30");
     private final List<String> NUMBERS_API_TYPE_LIST = List.of("trivia", "math", "date", "year");
-
     private final int MAX_HISTORY_DATA = 10;
     private final int MAX_BUTTONS_IN_RAW = 5;
     private final int MAX_BUTTONS_IN_SUBMENU_RAW = 3;
-
     private final String JOKE = "joke";
     private final String NUMBERS = "numbers";
     private final String CATS_FACTS = "cats facts";
@@ -87,40 +85,48 @@ public class MessagesBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         updateList.add(update);
         SendMessage message = new SendMessage();
-        if (update.hasMessage()) {
-            instructions(update, message);
-            message.setChatId(update.getMessage().getChatId());
-            introduceApiMenu(update, message);
+        DeleteMessage deleteMessage = new DeleteMessage();
+        Runnable runnable = () -> {
+            if (update.hasMessage()) {
+                message.setChatId(update.getMessage().getChatId());
+                introduceApiMenu(update, message);
 
-        } else if (update.hasCallbackQuery()) {
-            long chatId = update.getCallbackQuery().getFrom().getId();
-            message.setChatId(chatId);
-            String userChoice = update.getCallbackQuery().getData();
+            } else if (update.hasCallbackQuery()) {
+                long chatId = update.getCallbackQuery().getFrom().getId();
+                message.setChatId(chatId);
+                String userChoice = update.getCallbackQuery().getData();
 
-            if (userChoice.contains(UNIVERSITIES)) {
-                if (universitiesApi(update, message, chatId, userChoice)) return;
+                if (userChoice.contains(UNIVERSITIES)) {
+                    if (universitiesApi(update, message, chatId, userChoice)) return;
 
-            } else if (userChoice.contains(NUMBERS)) {
-                if (numbersApi(update, message, userChoice)) return;
+                } else if (userChoice.contains(NUMBERS)) {
+                    if (numbersApi(update, message, userChoice)) return;
 
-            } else if (userChoice.contains(CATS_FACTS)) {
-                message.setText(new JsonHandler<>(Cat.class).readJson(Cat.PATH).toString());
-                addHistory(update);
+                } else if (userChoice.contains(CATS_FACTS)) {
+                    message.setText(new JsonHandler<>(Cat.class).readJson(Cat.PATH).toString());
+                    addHistory(update);
 
-            } else if (userChoice.contains(QUOTES)) {
-                message.setText(new JsonHandler<>(QuotesAPI.class).readJson(QuotesAPI.PATH).toString());
-                addHistory(update);
+                } else if (userChoice.contains(QUOTES)) {
+                    message.setText(new JsonHandler<>(QuotesAPI.class).readJson(QuotesAPI.PATH).toString());
+                    addHistory(update);
 
-            } else if (userChoice.contains(JOKE)) {
-                if (jokeApi(update, message, chatId, userChoice)) return;
+                } else if (userChoice.contains(JOKE)) {
+                    if (jokeApi(update, message, chatId, userChoice)) return;
 
+                }
+                deleteMessage.setChatId(chatId);
+                deleteMessage.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
             }
-        }
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+            try {
+                execute(message);
+                if (update.hasCallbackQuery()){
+                    execute(deleteMessage);
+                }
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+        };
+        new Thread(runnable).start();
     }
 
     private void introduceApiMenu(Update update, SendMessage message) {
@@ -135,18 +141,9 @@ public class MessagesBot extends TelegramLongPollingBot {
         }
     }
 
-    private void instructions(Update update, SendMessage message) {
-        if (update.getMessage().isCommand()) {
-            switch (update.getMessage().getText()) {
-                case "/start" -> System.out.println(START_COMMAND);
-                default -> message.setText("Unknown command");
-            }
-        }
-    }
-
     private boolean numbersApi(Update update, SendMessage message, String userChoice) {
         if (userChoice.equals(NUMBERS)) {
-            editQueryMessage(update, "choose type of fact  : ", makeKeyboard(NUMBERS_API_TYPE_LIST, "numbers-type-",MAX_BUTTONS_IN_SUBMENU_RAW));
+            editQueryMessage(update, "choose type of fact  : ", makeKeyboard(NUMBERS_API_TYPE_LIST, "numbers-type-", MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("numbers-type-")) {
             String type = userChoice.replace("numbers-type-", "");
@@ -159,18 +156,18 @@ public class MessagesBot extends TelegramLongPollingBot {
 
     private boolean universitiesApi(Update update, SendMessage message, long chatId, String userChoice) {
         if (userChoice.equals(UNIVERSITIES)) {
-            editQueryMessage(update, "choose number of institutions : ", makeKeyboard(UNIVERSITIES_API_NUMBER_LIST, "universities-number-",MAX_BUTTONS_IN_RAW));
+            editQueryMessage(update, "choose number of institutions : ", makeKeyboard(UNIVERSITIES_API_NUMBER_LIST, "universities-number-", MAX_BUTTONS_IN_RAW));
             return true;
         } else if (userChoice.contains("universities-number-")) {
             universitiesUserChoiceNumberList.put(chatId, Integer.valueOf(userChoice.replace("universities-number-", "")));
-            editQueryMessage(update, "choose country institutions origin  : ", makeKeyboard(UNIVERSITIES_API_COUNTRIES_LIST, "universities-country-",MAX_BUTTONS_IN_SUBMENU_RAW));
+            editQueryMessage(update, "choose country institutions origin  : ", makeKeyboard(UNIVERSITIES_API_COUNTRIES_LIST, "universities-country-", MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("universities-country-")) {
             String country = userChoice.replace("universities-country-", "");
             country = country.replace(" ", "+");
             UniversitiesAPI[] array = new JsonHandler<>(UniversitiesAPI[].class).readJson("http://universities.hipolabs.com/search?country=" + country);
-            List<UniversitiesAPI> lista = List.of(array);
-            message.setText(lista.stream().limit(universitiesUserChoiceNumberList.get(chatId)).toList().toString());
+            List<UniversitiesAPI> universitiesAPIList = List.of(array);
+            message.setText(universitiesAPIList.stream().limit(universitiesUserChoiceNumberList.get(chatId)).toList().toString());
             addHistory(update);
         }
         return false;
@@ -178,15 +175,15 @@ public class MessagesBot extends TelegramLongPollingBot {
 
     private boolean jokeApi(Update update, SendMessage message, long chatId, String userChoice) {
         if (userChoice.equals(JOKE)) {
-            editQueryMessage(update, "choose type of joke  : ", makeKeyboard(JOKES_CATEGORIES, "joke-categories-",MAX_BUTTONS_IN_SUBMENU_RAW));
+            editQueryMessage(update, "choose type of joke  : ", makeKeyboard(JOKES_CATEGORIES, "joke-categories-", MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("joke-categories-")) {
             jokeUserChoiceCategories.put(chatId, userChoice.replace("joke-categories-", ""));
-            editQueryMessage(update, "choose language of joke  : ", makeKeyboard(JOKES_LANGUAGE, "joke-language-",MAX_BUTTONS_IN_SUBMENU_RAW));
+            editQueryMessage(update, "choose language of joke  : ", makeKeyboard(JOKES_LANGUAGE, "joke-language-", MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("joke-language-")) {
             jokeUserChoiceLanguage.put(chatId, userChoice.replace("joke-language-", ""));
-            editQueryMessage(update, "choose amount of jokes  : ", makeKeyboard(JOKES_AMOUNT, "joke-amount-",MAX_BUTTONS_IN_SUBMENU_RAW));
+            editQueryMessage(update, "choose amount of jokes  : ", makeKeyboard(JOKES_AMOUNT, "joke-amount-", MAX_BUTTONS_IN_SUBMENU_RAW));
             return true;
         } else if (userChoice.contains("joke-amount-")) {
             String amount = userChoice.replace("joke-amount-", "");
@@ -201,7 +198,7 @@ public class MessagesBot extends TelegramLongPollingBot {
         return false;
     }
 
-    private InlineKeyboardMarkup makeKeyboard(List<String> list, String callBackData, int amountInRaw ) {
+    private InlineKeyboardMarkup makeKeyboard(List<String> list, String callBackData, int amountInRaw) {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         int buttonsPerRow = amountInRaw;
         int rowCount = (int) Math.ceil((double) list.size() / buttonsPerRow);
@@ -219,10 +216,9 @@ public class MessagesBot extends TelegramLongPollingBot {
             rows.add(row);
         }
         return new InlineKeyboardMarkup(rows);
-
     }
 
-    public void editQueryMessage(Update update, String text, InlineKeyboardMarkup keyboard) {
+    private void editQueryMessage(Update update, String text, InlineKeyboardMarkup keyboard) {
         EditMessageText message = new EditMessageText(text);
         message.setChatId(update.getCallbackQuery().getFrom().getId());
         message.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
@@ -235,7 +231,7 @@ public class MessagesBot extends TelegramLongPollingBot {
     }
 
 
-    public synchronized void addHistory(Update update) {
+    private synchronized void addHistory(Update update) {
         String name = update.getCallbackQuery().getFrom().getFirstName();
         String userChoose = update.getCallbackQuery().getData();
         SimpleDateFormat format = new SimpleDateFormat(FORMAT_TO_DISPLAY_HISTORY_DATE_AND_TIME);
@@ -259,6 +255,6 @@ public class MessagesBot extends TelegramLongPollingBot {
     }
 
     public List<String> getHistoryData() {
-      return this.historyData;
+        return this.historyData;
     }
 }

@@ -1,8 +1,5 @@
 package org.example;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class Utils {
     private static final int SECOND = 1000;
 

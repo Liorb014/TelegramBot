@@ -55,9 +55,7 @@ public abstract class Panel extends JPanel {
         exitButton.setBounds(EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_SIZE, EXIT_BUTTON_SIZE);
         exitButton.setVisible(true);
         panel.add(exitButton);
-        exitButton.addActionListener((event) -> {
-            Window.changePanel(Window.getControlPanel(), panel);
-        });
+        exitButton.addActionListener((event) -> Window.changePanel(Window.getControlPanel(), panel));
         return exitButton;
     }
 
